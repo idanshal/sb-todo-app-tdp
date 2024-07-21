@@ -9,7 +9,7 @@
   - Validation
 - Fill in project metadata and generate
 
-[spring initializr](course_data/images/spring_initializr_screenshot.png)
+![spring initializr](course_data/images/spring_initializr_screenshot.png)
 
 ## Project structure
 - Open project in Intellij IDE

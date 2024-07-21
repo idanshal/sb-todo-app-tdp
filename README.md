@@ -21,9 +21,10 @@ Remove @Service from dependency class -> observe
 
 ## Compilation
 - Verify project bootstraps successfully
-- Review application.yml and modify port
+- Review application.yml and set the port to 8081
 ```yaml
-- server.port: 8081
+server:
+  port: 8081
 ```
 
 - Add the following packages
@@ -38,7 +39,7 @@ Remove @Service from dependency class -> observe
 - Create TodoEntity
 
 ## Configure Database
-
+We will work with the H2 in-memory database for this project.
 - Add the following yaml section to application.yml 
 ```yaml
 spring:
@@ -54,17 +55,21 @@ spring:
     hibernate:
       ddl-auto: update
 ```
+- Run the application and access the H2 console at http://localhost:8081/h2-console
+- Verify you have an empty TODO_ENTITY table
 
-## @Controller and @RestController
-
-Create TodoController
+## Creating the Controller layer
+- [] Create TodoController
 @RestController
 @RequestMapping
-Add endpoints
-getTodos
-getTodo
-createTodo
-updateTodo
-deleteTodo
-Create TodoService
-Create TodoRepository
+- Add the following endpoints:
+  - getTodos  
+  - getTodo
+  - createTodo
+  - updateTodo
+  - deleteTodo
+
+## Creating the Service layer
+- Create TodoService
+## Creating the Repo layer
+- Create TodoRepository

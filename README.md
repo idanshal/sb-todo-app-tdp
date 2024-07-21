@@ -17,6 +17,16 @@
 - Review pom.xml
   - Inspect dependencies
 - Review @SpringBootApplication
+  - From SpringApplication.run, the application will create the application context, that contains all the required Beans. 
+  - In the case of using a Web starter, it will also create an instance of Tomcat web server.
+```java
+@SpringBootApplication
+public class TodoAppApplication {
+	public static void main(String[] args) {
+		SpringApplication.run(TodoAppApplication.class, args);
+	}
+}
+```
 
 ## Compile & Run
 - Verify the application compiles and runs successfully
@@ -87,11 +97,6 @@ spring:
   - createTodo
   - updateTodo
   - deleteTodo
-
-## Creating the Service layer
-- Create TodoService
-## Creating the Repo layer
-- Create TodoRepository
 
 ## General best practices
 - Use DTOs to transfer data between layers (SoC)

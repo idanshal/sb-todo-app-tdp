@@ -9,14 +9,19 @@
   - Validation
 - Fill in project metadata and generate
 
+[spring initializr](course_data/images/spring_initializr_screenshot.png)
+
 ## Project structure
 - Open project in Intellij IDE
 - Review project files structure
 - Review pom.xml
+  - Inspect dependencies
 - Review @SpringBootApplication
 
-## Compilation
-- Verify project bootstraps successfully
+## Compile & Run
+- Verify the application compiles and runs successfully
+  - View logs in the console
+  - Note that application server (Tomcat) starts on port 8080
 - Review application.yml and set the port to 8081
 ```yaml
 server:
@@ -24,6 +29,7 @@ server:
 ```
 
 - Add packages: dto, controllers, services, dal
+
   
 ## Define models and entities
 - Create TodoRequest (String title, String description, Boolean isCompleted)
@@ -66,13 +72,17 @@ spring:
 - Remove @Service from dependency class
   - Observe Spring Boot does not bootstrap successfully
 
-## Creating the Controller layer
-- Create TodoController
+
+## Building our Controller layer
+
+### Request mappings
+@RequestMapping, @GetMapping, @PostMapping, @PutMapping, @DeleteMapping map web requests to Spring Controller methods.
+
+- Add @RequestMapping to the controller class with the path "/api/todos"
 
 @RestController
-@RequestMapping
 - Add the following endpoints:
-  - getTodos  
+  - getTodos   
   - getTodo
   - createTodo
   - updateTodo
@@ -82,3 +92,11 @@ spring:
 - Create TodoService
 ## Creating the Repo layer
 - Create TodoRepository
+
+## General best practices
+- Use DTOs to transfer data between layers (SoC)
+- Use Lombok to reduce boilerplate code
+- Prefer constructor injection over field injection (remember - you don't need @Autowired)
+- Use Java Streams to manipulate collections
+
+

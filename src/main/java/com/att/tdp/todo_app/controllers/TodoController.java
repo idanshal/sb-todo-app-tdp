@@ -31,7 +31,7 @@ public class TodoController {
     }
 
     @PostMapping
-    public TodoEntity createTodo(@RequestBody @Valid TodoRequest todo) {
+    public TodoEntity createTodo(@RequestBody TodoRequest todo) {
         return todoService.createTodo(todo);
     }
 

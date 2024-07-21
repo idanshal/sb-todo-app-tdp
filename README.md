@@ -32,10 +32,28 @@ Remove @Service from dependency class -> observe
   - services
   - dal
 
+## Define models and entities
 
-Create TodoRequest
-Create TodoEntity
-Configure Database
+- Create TodoRequest
+- Create TodoEntity
+
+## Configure Database
+
+- Add the following yaml section to application.yml 
+```yaml
+spring:
+  h2:
+    console:
+      enabled: true
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: tdp
+    password: tdp
+  jpa:
+    hibernate:
+      ddl-auto: update
+```
 
 ## @Controller and @RestController
 

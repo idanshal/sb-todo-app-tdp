@@ -12,7 +12,7 @@ public class TodoController {
     private TodoService todoService;
 
     @GetMapping("/hello")
-    public String hello(@PathVariable String name) {
+    public String hello(@RequestParam String name) {
         return todoService.sayHello(name);
     }
 }

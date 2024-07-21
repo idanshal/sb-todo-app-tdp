@@ -1,10 +1,5 @@
 # Spring Boot based Todo app for TDP
 
-
-DI
-Remove @Autowired from class member dependency -> observe dependency is null
-Remove @Service from dependency class -> observe
-
 ## Generate a Spring Boot project using Maven Initializr
 - Go to https://start.spring.io/
 - Add dependencies
@@ -18,6 +13,7 @@ Remove @Service from dependency class -> observe
 - Open project in Intellij IDE
 - Review project files structure
 - Review pom.xml
+- Review @SpringBootApplication
 
 ## Compilation
 - Verify project bootstraps successfully
@@ -27,16 +23,18 @@ server:
   port: 8081
 ```
 
-- Add the following packages
-  - dto
-  - controllers
-  - services
-  - dal
-
+- Add packages: dto, controllers, services, dal
+  
 ## Define models and entities
+- Create TodoRequest (String title, String description, Boolean isCompleted)
+- Create TodoEntity (Long id, String title, String description, Boolean isCompleted)
 
-- Create TodoRequest
-- Create TodoEntity
+## Create TodoRepository
+```java
+@Repository
+public interface TodoRepository extends JpaRepository<TodoEntity, Long> {
+}
+```
 
 ## Configure Database
 We will work with the H2 in-memory database for this project.
@@ -58,8 +56,19 @@ spring:
 - Run the application and access the H2 console at http://localhost:8081/h2-console
 - Verify you have an empty TODO_ENTITY table
 
+## Play with DI
+- Create TodoController
+- Create TodoService
+- Instruct Spring to manage instances of both classes
+- Instruct Spring to inject TodoService into TodoController
+- Remove @Autowired from class member dependency
+  - Observe dependency is null
+- Remove @Service from dependency class
+  - Observe Spring Boot does not bootstrap successfully
+
 ## Creating the Controller layer
-- [] Create TodoController
+- Create TodoController
+
 @RestController
 @RequestMapping
 - Add the following endpoints:

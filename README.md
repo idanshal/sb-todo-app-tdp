@@ -95,13 +95,15 @@ spring:
 
 - Add the following endpoints:
 
-| Method Name | Http Verb | Endpoint        | Returns     |
-|-------------|-----------|-----------------|-------------|
-| getTodos    | GET       | /api/todos      | List<TodoEntity> |
-| getTodo     | GET       | /api/todos/{id} | Row 1 Col 3 |
-| createTodo  | POST      | /api/todos      | Row 1 Col 3 |
-| updateTodo  | PUT       | /api/todos/{id} | Row 1 Col 3 |
-| deleteTodo  | DELETE    | /api/todos/{id} | Row 1 Col 3 |
+| Method Name | Http Verb | Endpoint        | Returns                              |
+|-------------|-----------|-----------------|--------------------------------------|
+| getTodos    | GET       | /api/todos      | ResponseEntity\<List\<TodoEntity\>\> |
+| getTodo     | GET       | /api/todos/{id} | ResponseEntity\<TodoEntity\>         |
+| createTodo  | POST      | /api/todos      | ResponseEntity\<TodoEntity\>         |
+| updateTodo  | PUT       | /api/todos/{id} | ResponseEntity\<TodoEntity\>         |
+| deleteTodo  | DELETE    | /api/todos/{id} | ResponseEntity\<Void\>               |
+
+- Finally, let's test the endpoints using Postman
  
 ## General guidelines
 - Use DTOs to transfer data between layers (SoC)

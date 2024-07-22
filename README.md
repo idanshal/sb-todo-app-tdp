@@ -15,7 +15,7 @@
 - Review project files structure
 - Review pom.xml
   - Inspect dependencies
-- Review @SpringBootApplication
+- Review `@SpringBootApplication`
   - From SpringApplication.run, the application will create the application context, that contains all the required Beans. 
   - In the case of using a Web starter, it will also create an instance of Tomcat web server.
 ```java
@@ -72,27 +72,41 @@ spring:
 - Verify you have an empty TODO_ENTITY table
 
 ## Play with DI (git branch: 01-di)
+
+
+
+
 - Create TodoController
 - Create TodoService
 - Instruct Spring to manage instances of both classes
 - Instruct Spring to inject TodoService into TodoController
-- Remove @Autowired from class member dependency
+- Remove `@Autowired` from class member dependency
   - Observe dependency is null
-- Remove @Service from dependency class
+- Remove `@Service` from dependency class
   - Observe Spring Boot does not bootstrap successfully
-- Finally, replace @Autowired with constructor injection
+- Finally, replace `@Autowired` with constructor injection
 
 
-## Building our Controller layer
+## Building our Controller layer and adding our BL (git branch: 02-bl)
+
+- Add `@Controller` to the controller class
 
 ### Request mappings
+`@RequestMapping`, `@GetMapping`, `@PostMapping`, `@PutMapping`, `@DeleteMapping` map web requests to Spring Controller methods.
 
-- Add @Controller to the controller class
+### Request Binding
+- `@PathVariable` - Binds a URI template variable to a method parameter
+- `@RequestParam` - Binds a query parameter to a method parameter
+- `@RequestBody` - Binds the HTTP request body to a method parameter
 
-@RequestMapping, @GetMapping, @PostMapping, @PutMapping, @DeleteMapping map web requests to Spring Controller methods.
+### Response Handling
+- `ResponseEntity` represents the whole HTTP response: status code, headers, and body. 
+  - As a result, we can use it to fully configure the HTTP response. 
+  - If we want to use it, we have to return it from the endpoint; Spring takes care of the rest.
+- `@ResponseStatus` - Sets the status code of the HTTP response
+- `@ResponseBody` - Binds a method return value to the response body
 
-- Add @RequestMapping to the controller class with the path "/api/todos"
-
+- Add `@RequestMapping` to the controller class with the path "/api/todos"
 - Add the following endpoints:
 
 | Method Name | Http Verb | Endpoint        | Returns                              |
@@ -104,7 +118,7 @@ spring:
 | deleteTodo  | DELETE    | /api/todos/{id} | ResponseEntity\<Void\>               |
 
 - Finally, let's test the endpoints using Postman
- 
+
 ## General guidelines
 - Use DTOs to transfer data between layers (SoC)
 - Use Lombok to reduce boilerplate code
@@ -112,9 +126,9 @@ spring:
 - Use Java Streams to manipulate collections
 - More to explore
   - Spring AOP for cross-cutting concerns
-  - @Async for asynchronous processing
-  - @Scheduled for scheduled tasks
-  - @Transactional for transaction management
+  - `@Async` for asynchronous processing
+  - `@Scheduled` for scheduled tasks
+  - `@Transactional` for transaction management
   - Filters & Interceptors for request/response manipulation
 - Use ObjectMapper to serialize/deserialize objects to/from JSON
 - 

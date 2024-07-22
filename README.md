@@ -71,7 +71,7 @@ spring:
 - Run the application and access the H2 console at http://localhost:8081/h2-console
 - Verify you have an empty TODO_ENTITY table
 
-## Play with DI
+## Play with DI (git branch: 01-di)
 - Create TodoController
 - Create TodoService
 - Instruct Spring to manage instances of both classes
@@ -86,18 +86,23 @@ spring:
 ## Building our Controller layer
 
 ### Request mappings
+
+- Add @Controller to the controller class
+
 @RequestMapping, @GetMapping, @PostMapping, @PutMapping, @DeleteMapping map web requests to Spring Controller methods.
 
 - Add @RequestMapping to the controller class with the path "/api/todos"
 
-@RestController
 - Add the following endpoints:
-  - getTodos    
-  - getTodo
-  - createTodo
-  - updateTodo
-  - deleteTodo
 
+| Method Name | Http Verb | Endpoint        | Returns     |
+|-------------|-----------|-----------------|-------------|
+| getTodos    | GET       | /api/todos      | List<TodoEntity> |
+| getTodo     | GET       | /api/todos/{id} | Row 1 Col 3 |
+| createTodo  | POST      | /api/todos      | Row 1 Col 3 |
+| updateTodo  | PUT       | /api/todos/{id} | Row 1 Col 3 |
+| deleteTodo  | DELETE    | /api/todos/{id} | Row 1 Col 3 |
+ 
 ## General guidelines
 - Use DTOs to transfer data between layers (SoC)
 - Use Lombok to reduce boilerplate code

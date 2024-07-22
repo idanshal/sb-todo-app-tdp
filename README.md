@@ -73,8 +73,8 @@ spring:
 
 ## Play with DI (git branch: 01-di)
 
-
-
+`@Component` is a generic stereotype for any Spring-managed component.
+`@Repository`, `@Service`, and `@Controller` are specializations of `@Component` for more specific use cases (in the persistence, service, and presentation layers, respectively).
 
 - Create TodoController
 - Create TodoService
@@ -88,8 +88,6 @@ spring:
 
 
 ## Building our Controller layer and adding our BL (git branch: 02-bl)
-
-- Add `@Controller` to the controller class
 
 ### Request mappings
 `@RequestMapping`, `@GetMapping`, `@PostMapping`, `@PutMapping`, `@DeleteMapping` map web requests to Spring Controller methods.
@@ -118,6 +116,30 @@ spring:
 | deleteTodo  | DELETE    | /api/todos/{id} | ResponseEntity\<Void\>               |
 
 - Finally, let's test the endpoints using Postman
+
+## Adding error handling (git branch: 03-error-handling)
+
+### @ExceptionHandler
+
+`@ExceptionHandler` is a Spring annotation that provides a mechanism to treat exceptions thrown during execution of 
+handlers (controller operations).
+
+```java
+public class FooController{
+//...
+@ExceptionHandler({ CustomException1.class, CustomException2.class })
+public void handleException() { //
+}
+}
+```
+If we enter this annotation on methods of controller classes, 
+it will serve as the entry point for handling exceptions thrown within this controller only.
+
+
+---
+`@RestController` is a specialized version of the controller.
+It includes the `@Controller` and `@ResponseBody` annotations, and as a result, simplifies the controller implementation.
+
 
 ## General guidelines
 - Use DTOs to transfer data between layers (SoC)

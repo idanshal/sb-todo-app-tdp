@@ -3,8 +3,6 @@ package com.att.tdp.todo_app.controllers;
 import com.att.tdp.todo_app.dto.TodoEntity;
 import com.att.tdp.todo_app.dto.TodoRequest;
 import com.att.tdp.todo_app.services.TodoService;
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +14,11 @@ import java.util.Optional;
 @RequestMapping("/api/todos")
 public class TodoController {
 
-    @Autowired
-    private TodoService todoService;
+    private final TodoService todoService;
+
+    public TodoController(TodoService todoService) {
+        this.todoService = todoService;
+    }
 
     @GetMapping
     public List<TodoEntity> getTodos() {

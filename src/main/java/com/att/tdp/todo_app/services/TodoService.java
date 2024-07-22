@@ -12,8 +12,11 @@ import java.util.Optional;
 @Service
 public class TodoService {
 
-    @Autowired
-    private TodoRepository todoRepository;
+    private final TodoRepository todoRepository;
+
+    public TodoService(TodoRepository todoRepository) {
+        this.todoRepository = todoRepository;
+    }
 
     public List<TodoEntity> getTodos() {
         return todoRepository.findAll();

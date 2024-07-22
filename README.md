@@ -6,7 +6,6 @@
   - Spring Web
   - Spring Data JPA
   - H2 Database
-  - Validation
 - Fill in project metadata and generate
 
 ![spring initializr](course_data/images/spring_initializr_screenshot.png)
@@ -81,6 +80,7 @@ spring:
   - Observe dependency is null
 - Remove @Service from dependency class
   - Observe Spring Boot does not bootstrap successfully
+- Finally, replace @Autowired with constructor injection
 
 
 ## Building our Controller layer
@@ -92,16 +92,24 @@ spring:
 
 @RestController
 - Add the following endpoints:
-  - getTodos   
+  - getTodos    
   - getTodo
   - createTodo
   - updateTodo
   - deleteTodo
 
-## General best practices
+## General guidelines
 - Use DTOs to transfer data between layers (SoC)
 - Use Lombok to reduce boilerplate code
 - Prefer constructor injection over field injection (remember - you don't need @Autowired)
 - Use Java Streams to manipulate collections
+- More to explore
+  - Spring AOP for cross-cutting concerns
+  - @Async for asynchronous processing
+  - @Scheduled for scheduled tasks
+  - @Transactional for transaction management
+  - Filters & Interceptors for request/response manipulation
+- Use ObjectMapper to serialize/deserialize objects to/from JSON
+- 
 
 

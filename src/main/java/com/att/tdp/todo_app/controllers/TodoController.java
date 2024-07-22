@@ -4,7 +4,6 @@ import com.att.tdp.todo_app.dto.TodoEntity;
 import com.att.tdp.todo_app.dto.TodoRequest;
 import com.att.tdp.todo_app.services.TodoService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

@@ -115,26 +115,50 @@ spring:
 | updateTodo  | PUT       | /api/todos/{id} | ResponseEntity\<TodoEntity\>         |
 | deleteTodo  | DELETE    | /api/todos/{id} | ResponseEntity\<Void\>               |
 
+- At this phase, we return an Optional<TodoEntity> from the service layer. 
+If a todo doesn't exist, we return 404.
 - Finally, let's test the endpoints using Postman
 
 ## Adding error handling (git branch: 03-error-handling)
 
-### @ExceptionHandler
+- First let's refactor our service layer to throw exceptions in case a todo is not found.
+  - For that purpose, create an exceptions package and a custom exception class `TodoNotFoundException`
+
+### `@ExceptionHandler`
 
 `@ExceptionHandler` is a Spring annotation that provides a mechanism to treat exceptions thrown during execution of 
-handlers (controller operations).
+controller methods.
 
 ```java
 public class FooController{
 //...
-@ExceptionHandler({ CustomException1.class, CustomException2.class })
-public void handleException() { //
+@ExceptionHandler
+public void handleException(CustomException ex) {
+  // Serves as the entry point for handling the specified exception in this controller only
 }
 }
 ```
-If we enter this annotation on methods of controller classes, 
-it will serve as the entry point for handling exceptions thrown within this controller only.
+- Add an exception handler for TodoNotFoundException
+  - Create an ErrorDto (String errorCode, String errorMessage) 
+  - return a ResponseEntity\<ErrorDto\> with a 404 status code, where errorCode is 100 and errorMessage is the exception message
 
+### `@ControllerAdvice`
+
+The most common approach is to use `@ExceptionHandler` on methods of a `@ControllerAdvice` classes so that 
+the Spring Boot exception handling will be applied globally for all application controllers (or to a subset of controllers, if specified).
+`@ControllerAdvice` is an annotation in Spring and, as the name suggests, is “advice” for multiple controllers. 
+It enables the application of a single `@ExceptionHandler` to multiple controllers. 
+With this annotation, we can define how to treat such an exception in a single place, and the system will call this handler for thrown exceptions on classes covered by this `@ControllerAdvice`.
+
+- Add a `@ControllerAdvice` class `RestExceptionHandler`
+- Extend it from `ResponseEntityExceptionHandler`, as it already provides some basic handling of Spring MVC exceptions
+- Move the `@ExceptionHandler` method from the controller to the `@ControllerAdvice` class
+- Make sure that everything works as expected
+
+- Add an endpoint which deliberately throws IllegalArgumentException
+  - Observe what Spring Boot returns
+- Add an exception handler for `IllegalArgumentException` which returns a ResponseEntity\<ErrorDto\> with a 400 status code, 
+where errorCode is 101 and errorMessage is the exception message
 
 ---
 `@RestController` is a specialized version of the controller.

@@ -3,7 +3,7 @@ package com.att.tdp.todo_app.services;
 import com.att.tdp.todo_app.dal.TodoRepository;
 import com.att.tdp.todo_app.dto.TodoEntity;
 import com.att.tdp.todo_app.dto.TodoRequest;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.att.tdp.todo_app.exceptions.TodoNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,8 +22,12 @@ public class TodoService {
         return todoRepository.findAll();
     }
 
-    public Optional<TodoEntity> getTodo(Long id) {
-        return todoRepository.findById(id);
+    public TodoEntity getTodo(Long id) {
+        Optional<TodoEntity> todo = todoRepository.findById(id);
+        if (todo.isEmpty()) {
+            throw new TodoNotFoundException("todo not found. id: %s".formatted(id));
+        }
+        return todo.get();
     }
 
     public TodoEntity createTodo(TodoRequest todoRequest) {
@@ -34,12 +38,7 @@ public class TodoService {
     }
 
     public TodoEntity updateTodo(Long id, TodoRequest todoRequest) {
-        Optional<TodoEntity> todoEntity = todoRepository.findById(id);
-        if (todoEntity.isEmpty()) {
-            return null;
-        }
-
-        TodoEntity updatedTodo = todoEntity.get();
+        TodoEntity updatedTodo = getTodo(id);
         if (todoRequest.getTitle() != null) {
             updatedTodo.setTitle(todoRequest.getTitle());
         }
@@ -57,11 +56,7 @@ public class TodoService {
     }
 
     public Long deleteTodo(Long id) {
-        if (todoRepository.findById(id).isPresent()) {
-            todoRepository.deleteById(id);
-            return id;
-        }
-
-        return null;
+        TodoEntity todo = getTodo(id);
+        return todo.getId();
     }
 }

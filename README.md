@@ -101,8 +101,6 @@ spring:
 - `ResponseEntity` represents the whole HTTP response: status code, headers, and body. 
   - As a result, we can use it to fully configure the HTTP response. 
   - If we want to use it, we have to return it from the endpoint; Spring takes care of the rest.
-- `@ResponseStatus` - Sets the status code of the HTTP response
-- `@ResponseBody` - Binds a method return value to the response body
 
 - Add `@RequestMapping` to the controller class with the path "/api/todos"
 - Add the following endpoints:
@@ -160,10 +158,18 @@ With this annotation, we can define how to treat such an exception in a single p
 - Add an exception handler for `IllegalArgumentException` which returns a ResponseEntity\<ErrorDto\> with a 400 status code, 
 where errorCode is 101 and errorMessage is the exception message
 
----
+## `@RestController`, `@ResponseBody`, `@ResponseStatus` and `@RestControllerAdvice` (git branch: 04-rest-controller)
+
 `@RestController` is a specialized version of the controller.
 It includes the `@Controller` and `@ResponseBody` annotations, and as a result, simplifies the controller implementation.
 
+`@ResponseBody` is a Spring annotation that binds a method return value to the response body.
+`@ResponseStatus` is a Spring annotation that marks a method or exception class with the status code and reason that should be returned.
+`@RestControllerAdvice` is a specialization of `@ControllerAdvice` that is used to define `@ExceptionHandler` methods that apply to all `@RestController` classes.
+
+- Refactor the controller to use `@RestController` & `@ResponseStatus`
+- Refactor the `@ControllerAdvice` to use `@RestControllerAdvice` & `@ResponseStatus`
+- Rerun the application and test the endpoints
 
 ## General guidelines
 - Use DTOs to transfer data between layers (SoC)

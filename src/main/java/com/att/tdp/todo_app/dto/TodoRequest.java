@@ -7,11 +7,11 @@ import jakarta.validation.constraints.Size;
 public class TodoRequest {
 
     @NotBlank
-    @Size(min=3, max=100)
+    @Size(min=3)
     private String title;
 
     @NotBlank
-    @Max(300)
+    //@Max(300)
     private String description;
 
     private Boolean isCompleted;

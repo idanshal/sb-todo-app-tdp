@@ -210,6 +210,15 @@ or field to be validated.
   - title should not be null or empty and also should have a min length of 3 and a max length of 100
   - description should not be null or empty and also should have a max length of 300
 - Add validation for the POST/PUT requests so that the TodoRequest is validated
+
+## Configuration (git branch: 06-configuration)
+
+TBD
+
+## Testing (git branch: 07-testing)
+
+TBD
+
 ## General guidelines
 - Use DTOs to transfer data between layers (SoC)
 - Use Lombok to reduce boilerplate code

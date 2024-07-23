@@ -3,13 +3,16 @@ package com.att.tdp.todo_app.controllers;
 import com.att.tdp.todo_app.dto.TodoEntity;
 import com.att.tdp.todo_app.dto.TodoRequest;
 import com.att.tdp.todo_app.services.TodoService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/todos")
+@Validated
 public class TodoController {
 
     private final TodoService todoService;
@@ -35,12 +38,12 @@ public class TodoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public TodoEntity createTodo(@RequestBody TodoRequest todoRequest) {
+    public TodoEntity createTodo(@RequestBody @Valid TodoRequest todoRequest) {
         return todoService.createTodo(todoRequest);
     }
 
     @PutMapping("/{id}")
-    public TodoEntity updateTodo(@PathVariable Long id, @RequestBody TodoRequest todoRequest) {
+    public TodoEntity updateTodo(@PathVariable Long id, @RequestBody @Valid TodoRequest todoRequest) {
         return todoService.updateTodo(id, todoRequest);
     }
 

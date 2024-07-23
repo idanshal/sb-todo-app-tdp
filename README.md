@@ -1,12 +1,15 @@
 # Spring Boot based Todo app for TDP
 
-## Generate a Spring Boot project using Maven Initializr
+## Generate a Spring Boot Project using Maven Initializr
+
+![HANDS-ON TIME](https://img.shields.io/badge/HANDS--ON%20TIME-F39C12?logo=read-the-docs&logoColor=white)
+
 - Go to https://start.spring.io/
 - Add dependencies
   - Spring Web
   - Spring Data JPA
   - H2 Database
-- Fill in project metadata and generate
+- Fill in the project metadata and generate
 
 ![spring initializr](course_data/images/spring_initializr_screenshot.png)
 
@@ -36,7 +39,6 @@ public class TodoAppApplication {
 server:
   port: 8081
 ```
-
 - Add packages: dto, controllers, services, dal
 
   
@@ -171,6 +173,43 @@ It includes the `@Controller` and `@ResponseBody` annotations, and as a result, 
 - Refactor the `@ControllerAdvice` to use `@RestControllerAdvice` & `@ResponseStatus`
 - Rerun the application and test the endpoints
 
+
+## Adding validation (git branch: 05-validation)
+
+Java Bean Validation is the de-facto standard for implementing validation logic in the Java ecosystem. 
+It’s well integrated with Spring and Spring Boot.
+Spring Boot’s Bean Validation support comes with the validation starter:
+
+```xml
+<dependency> 
+    <groupId>org.springframework.boot</groupId> 
+    <artifactId>spring-boot-starter-validation</artifactId> 
+</dependency>
+```
+
+Very basically, Bean Validation works by defining constraints to the fields of a class by annotating them with 
+certain annotations, for example:
+@NotNull
+@Size
+@Min and @Max
+@NotEmpty, @NotBlank
+@Pattern
+@Positive, @PositiveOrZero, @Negative, @NegativeOrZero
+Etc.
+
+### @Validated and @Valid
+
+The `@Validated` annotation is a class-level annotation that we can use to tell Spring to validate parameters that 
+are passed into a method of the annotated class.
+
+Adding the `@Valid` annotation on method parameters and fields tells Spring that we want a method parameter 
+or field to be validated.
+
+- Add the spring-boot-starter-validation dependency to the pom.xml
+- Add validation annotations to the TodoRequest class
+  - title should not be null or empty and also should have a min length of 3 and a max length of 100
+  - description should not be null or empty and also should have a max length of 300
+- Add validation for the POST/PUT requests so that the TodoRequest is validated
 ## General guidelines
 - Use DTOs to transfer data between layers (SoC)
 - Use Lombok to reduce boilerplate code

@@ -210,6 +210,44 @@ or field to be validated.
   - title should not be null or empty and also should have a min length of 3 and a max length of 100
   - description should not be null or empty and also should have a max length of 300
 - Add validation for the POST/PUT requests so that the TodoRequest is validated
+- Add validation for the id path variable so that it is a positive number
+
+### Customizing the error response for validation errors
+
+If a validation of request body fails, a MethodArgumentNotValidException will be triggered. 
+By default, Spring will translate this exception to a HTTP status 400 (Bad Request).
+We can customize the response by adding a custom exception handler.
+
+- Add a custom exception handler for MethodArgumentNotValidException in the @RestControllerAdvice class like so:
+
+```java
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+                                                                  HttpHeaders headers,
+                                                                  HttpStatusCode status,
+                                                                  WebRequest request) {
+        String message = buildMessage(ex);
+        ErrorDto errorDto = new ErrorDto("102", message);
+        return new ResponseEntity<>(errorDto, status);
+    }
+
+    private String buildMessage(MethodArgumentNotValidException ex) {
+        BindingResult bindingResult = ex.getBindingResult();
+        return bindingResult.getFieldErrors()
+                .stream()
+                .map(this::toMessage)
+                .collect(joining(", "));
+    }
+
+    private String toMessage(FieldError error) {
+        return "Field '%s.%s' %s".formatted(error.getObjectName(), error.getField(), error.getDefaultMessage());
+    }
+```
+
+If a validation of path variables or request parameters fails, a ConstraintViolationException will be triggered. 
+By default, Spring will translate it to a Http status 500 (Internal Server Error).
+If we want to return a HTTP status 400 instead (which makes sense, since the client provided an invalid parameter, making it a bad request), 
+we can add a custom exception handler.
 
 ## Configuration (git branch: 06-configuration)
 

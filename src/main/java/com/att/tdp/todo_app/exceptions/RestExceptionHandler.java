@@ -16,7 +16,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import static java.util.stream.Collectors.joining;
 
-//@RestControllerAdvice
+@RestControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler
@@ -31,16 +31,15 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ErrorDto("101", e.getMessage());
     }
 
-//    @Override
-//    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-//                                                                  HttpHeaders headers,
-//                                                                  HttpStatusCode status,
-//                                                                  WebRequest request) {
-//        logger.error("#handleMethodArgumentNotValid - ", ex);
-//        String message = buildMessage(ex);
-//        ErrorDto errorDto = new ErrorDto("102", message);
-//        return new ResponseEntity<>(errorDto, status);
-//    }
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+                                                                  HttpHeaders headers,
+                                                                  HttpStatusCode status,
+                                                                  WebRequest request) {
+        String message = buildMessage(ex);
+        ErrorDto errorDto = new ErrorDto("102", message);
+        return new ResponseEntity<>(errorDto, status);
+    }
 
     private String buildMessage(MethodArgumentNotValidException ex) {
         BindingResult bindingResult = ex.getBindingResult();
@@ -51,7 +50,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     private String toMessage(FieldError error) {
-        return String.format("Field '%s.%s' %s", error.getObjectName(), error.getField(), error.getDefaultMessage());
+        return "Field '%s.%s' %s".formatted(error.getObjectName(), error.getField(), error.getDefaultMessage());
     }
 
 }

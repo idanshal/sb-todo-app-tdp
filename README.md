@@ -347,6 +347,7 @@ In pom.xml add:
         </dependency>
 ```
 
+- IDE: enable annotation processing
 - Refactor TodoController and TodoService to use @RequiredArgsConstructor (remove ctors)
 - Refactor TodoRequest, TodoEntity, ErrorDto, and TodoAppConfig to use @Data and @NoArgsConstructor (remove setters/getters)
   - add @AllArgsConstructor to ErrorDto

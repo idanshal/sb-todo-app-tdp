@@ -1,6 +1,5 @@
 package com.att.tdp.todo_app.dto;
 
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -11,7 +10,7 @@ public class TodoRequest {
     private String title;
 
     @NotBlank
-    @Max(300)
+    @Size(max = 300)
     private String description;
 
     private Boolean isCompleted;

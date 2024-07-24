@@ -309,13 +309,12 @@ todo-app:
 - Inject the PATH environment variable into the MetaController (use @Value) and return it as a response for GET /api/meta/path
 - Test the endpoints using Postman
 
-## Testing (git branch: 07-testing)
+## Touch-ups (git branch - 07-touch-ups)
 
-## Extras
+### Adding Spring Actuator to the project
 
-### Spring Actuator
-
-Spring Boot Actuator adds several production-grade services to your application with little effort on your part.
+In essence, Actuator brings production-ready features to our application.
+Monitoring our app, gathering metrics, and understanding traffic or the state of our database becomes trivial with this dependency.
 
 In pom.xml add:
 ```xml
@@ -326,7 +325,7 @@ In pom.xml add:
 ```
 
 Going now to http://localhost:8081/actuator/health should result with: {"status":"UP"}
-If you add the following section to the yaml: 
+To get more info add the following section to the yaml:
 ```yaml
 management:
   endpoint:
@@ -334,9 +333,12 @@ management:
       show-details: always
 ```
 
-More info will be shown for actuator/health
 
 
+
+## Testing (git branch: 07-testing)
+
+## Extras
 
 
 

@@ -115,7 +115,7 @@ spring:
 | updateTodo  | PUT       | /api/todos/{id} | ResponseEntity\<TodoEntity\>         |
 | deleteTodo  | DELETE    | /api/todos/{id} | ResponseEntity\<Void\>               |
 
-- At this phase, we return an Optional<TodoEntity> from the service layer. 
+- At this phase, we return a TodoEntity from the service layer if exists, null otherwise. 
 If a todo doesn't exist, we return 404.
 - Finally, let's test the endpoints using Postman
 
@@ -333,8 +333,24 @@ management:
       show-details: always
 ```
 
+### Adding Lombok to the project
 
+Lombok is a library that helps to reduce boilerplate code in Java classes.
+It provides a set of annotations that generate the code for us during compilation.
 
+In pom.xml add:
+```xml
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+```
+
+- Refactor TodoController and TodoService to use @RequiredArgsConstructor (remove ctors)
+- Refactor TodoRequest, TodoEntity, ErrorDto, and TodoAppConfig to use @Data and @NoArgsConstructor (remove setters/getters)
+  - add @AllArgsConstructor to ErrorDto
+- Test your endpoints and make sure everything works as expected
 
 ## Testing (git branch: 07-testing)
 

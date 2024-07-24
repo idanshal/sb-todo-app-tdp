@@ -5,6 +5,7 @@ import com.att.tdp.todo_app.dto.TodoRequest;
 import com.att.tdp.todo_app.services.TodoService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -14,14 +15,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/todos")
 @Validated
+@RequiredArgsConstructor
 public class TodoController {
 
     private final TodoService todoService;
-
-
-    public TodoController(TodoService todoService) {
-        this.todoService = todoService;
-    }
 
     @GetMapping
     public List<TodoEntity> getTodos() {

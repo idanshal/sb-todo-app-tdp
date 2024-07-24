@@ -211,6 +211,7 @@ or field to be validated.
   - description should not be null or empty and also should have a max length of 300
 - Add validation for the POST/PUT requests so that the TodoRequest is validated
 - Add validation for the id path variable so that it is a positive number
+- Test endpoints using Postman and verify that validation works as expected
 
 ### Customizing the error response for validation errors
 
@@ -243,6 +244,7 @@ We can customize the response by adding a custom exception handler.
         return "Field '%s.%s' %s".formatted(error.getObjectName(), error.getField(), error.getDefaultMessage());
     }
 ```
+- Test endpoints using Postman and verify that validation works as expected
 
 If a validation of path variables or request parameters fails, a ConstraintViolationException will be triggered. 
 By default, Spring will translate it to a Http status 500 (Internal Server Error).

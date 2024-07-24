@@ -205,6 +205,9 @@ are passed into a method of the annotated class.
 Adding the `@Valid` annotation on method parameters and fields tells Spring that we want a method parameter 
 or field to be validated.
 
+Using those annotations, we can validate a RestController user input.
+There are three things we can validate for any incoming HTTP request: Request body, Path variables, Query parameters.
+
 - Add the spring-boot-starter-validation dependency to the pom.xml
 - Add validation annotations to the TodoRequest class
   - title should not be null or empty and also should have a min length of 3 and a max length of 100
@@ -253,11 +256,126 @@ we can add a custom exception handler.
 
 ## Configuration (git branch: 06-configuration)
 
-TBD
+There are different options to store or apply configuration in Spring Boot, including:
+- application.properties or application.yml
+- Environment variables
+- Command-line arguments
+
+Spring Boot loads all these properties, and they can be easily injected into a managed Bean.
+Spring Boot loads the properties in a very particular order (read [here](https://docs.spring.io/spring-boot/reference/features/external-config.html)).
+
+### @Value
+
+`@Value` is a Spring annotation that allows us to inject values from properties files or environment variables into 
+fields of a Spring Bean.
+
+
+### @ConfigurationProperties
+
+`@ConfigurationProperties` is a Spring annotation that binds the fields of a class to the properties defined in the 
+application.properties or application.yml file.
+
+Spring Boot supports relaxed binding while mapping properties using @ConfigurationProperties beans, 
+so there is no need to be an exact match between property names and bean properties.
+For example, app-name in the properties file can be mapped to appName in the bean class.
+
+### @ConfigurationPropertiesScan
+
+`@ConfigurationPropertiesScan` is a Spring annotation that tells Spring Boot to scan and register
+`@ConfigurationProperties` classes as beans. 
+
+### Environment
+
+The `Environment` object is a Spring abstraction that represents the environment in which the current application is running.
+It provides methods to access properties from the application.properties or application.yml file, 
+as well as environment variables.
+
+- Add a MetaController with a request mapping /api/meta
+- Create the following yaml section:
+
+```yaml
+todo-app:
+  version: 1.0.0
+  title: Todo App
+  description: Spring Boot based Todo App for TDP
+```
+- Create a new package config and add a TodoAppConfig class (String version, String title, String description) - setters and getters
+- Add the `@ConfigurationProperties` annotation to the TodoAppConfig class (prefix = "todo-app")
+- Add the `@ConfigurationPropertiesScan` annotation to the TodoAppApplication class
+- Inject the TodoAppConfig into the MetaController and return it as a response for GET /api/meta
+- Inject the todo-app.version property into the MetaController (use @Value) and return it as a response for GET /api/meta/version
+- Inject the server.port property into the MetaController (use @Value) and return it as a response for GET /api/meta/port
+- Inject the Environment object into the MetaController and return the JAVA_HOME environment variable as a response for GET /api/meta/java-home
+- Inject the PATH environment variable into the MetaController (use @Value) and return it as a response for GET /api/meta/path
+- Test the endpoints using Postman
 
 ## Testing (git branch: 07-testing)
 
-TBD
+## Extras
+
+### Spring Actuator
+
+Spring Boot Actuator adds several production-grade services to your application with little effort on your part.
+
+In pom.xml add:
+```xml
+<dependency>
+<groupId>org.springframework.boot</groupId>
+<artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+```
+
+Going now to http://localhost:8081/actuator/health should result with: {"status":"UP"}
+If you add the following section to the yaml: 
+```yaml
+management:
+  endpoint:
+    health:
+      show-details: always
+```
+
+More info will be shown for actuator/health
+
+
+
+
+
+### Beans Scope
+A scope of a Bean describes how many instances should the container manage.
+There are 6 types of beans scope. The most popular are:
+Singleton (default) – the bean’s instance is created exactly once, and the same instance will be injected and used whenever it is requested
+Prototype – whenever an instance of a certain bean is requested – a new instance of it will be created
+
+The last four scopes are only available in a web-aware application:
+Request – per Http call
+Session – per user session
+Application – per servlet context
+WebSocket - per web socket connection
+
+To define a bean’s scope, we can use the `@Scope` annotation.
+
+### @PostConstruct and @PreDestroy
+
+#### @PostConstruct
+
+Sometimes you may need access to the bean once it is fully created:
+- Perform some logical validation and assertions
+- Setup non-spring dependencies based on injectable beans
+- Verify autowire decisions
+
+How can you know when a bean is passed through the creation process?
+In constructor – setters DI have not been set yet
+In each setter – you can’t tell what is the status of other status
+
+Solution - In the Bean class, annotate a method with `@PostConstruct` and Spring will call it 
+just after the initialization of the Bean properties.
+
+#### @PreDestroy
+
+Similar to @PostConstruct, @PreDestroy can be added to a Bean class's method, 
+and it will be called before Spring removes our bean from the application context.
+Using @PreDestroy, you can supply a graceful shutdown for your bean.
+
 
 ## General guidelines
 - Use DTOs to transfer data between layers (SoC)

@@ -1,8 +1,11 @@
 server:
   port: 8081
-  error:
-    include-message: always
-    include-binding-errors: always
+
+management:
+  endpoint:
+    health:
+      show-details: always
+
 
 spring:
   h2:
@@ -16,3 +19,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+
+
+
+todo-app:
+  version: 1.0.0
+  title: Todo App
+  description: Spring Boot based Todo App for TDP

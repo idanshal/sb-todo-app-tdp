@@ -1,5 +1,18 @@
 # Spring Boot based Todo app for TDP
 
+## Pre-requisites
+
+- A working internet connection
+  - Proxy settings configured on your machine
+- Java 21 (check yourself: `java --version` should result with output)   
+- Latest _Maven_ (check yourself: `mvn --version` should result with output)  
+  - Configured with jFrog repository
+- Latest _Intellij IDEA_
+  - Proxy settings configured in IDE
+- Postman
+- Git
+
+
 ## Generate a Spring Boot Project using Maven Initializr
 
 ![HANDS-ON TIME](https://img.shields.io/badge/HANDS--ON%20TIME-F39C12?logo=read-the-docs&logoColor=white)

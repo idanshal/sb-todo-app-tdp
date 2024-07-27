@@ -350,6 +350,7 @@ management:
 
 Lombok is a library that helps to reduce boilerplate code in Java classes.
 It provides a set of annotations that generate the code for us during compilation.
+Read [here](https://projectlombok.org/features/) for more.
 
 In pom.xml add:
 ```xml
@@ -364,6 +365,8 @@ In pom.xml add:
 - Refactor TodoController and TodoService to use @RequiredArgsConstructor (remove ctors)
 - Refactor TodoRequest, TodoEntity, ErrorDto, and TodoAppConfig to use @Data and @NoArgsConstructor (remove setters/getters)
   - add @AllArgsConstructor to ErrorDto
+- Modify spring.datasource.username and spring.datasource.password values in application.yml 
+to use the DB_USERNAME and DB_PASSWORD environment variables respectively
 - Test your endpoints and make sure everything works as expected
 
 ## Testing (git branch: 07-testing)

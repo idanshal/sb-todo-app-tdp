@@ -369,11 +369,69 @@ In pom.xml add:
 to use the DB_USERNAME and DB_PASSWORD environment variables respectively
 - Test your endpoints and make sure everything works as expected
 
-## Testing (git branch: 07-testing)
+## Testing (git branch: 08-testing)
+
+_Spring Boot_ provides several utilities and annotations to help when testing your application.
+Most developers use the spring-boot-starter-test “Starter”, which imports (in the test scope):
+- _Spring Test_ & _Spring Boot Test_ - utilities and integration test support for Spring Boot applications.
+- _Junit_ - the de-facto standard for unit testing Java applications.
+- _AssertJ_ - a fluent assertion library.
+- _Mockito_ - a Java mocking framework.
+- _Hamcrest_ - a library of matcher objects
+- a number of other useful testing libraries.
+
+### @SpringBootTest
+
+The `@SpringBootTest` annotation is useful when we need to bootstrap the entire Spring application container.
+This annotation creates an application context and loads all beans of the application.
+It means we can `@Autowire` any bean that's picked up by component scanning into our test.
+@SpringBootTest starts the embedded server and creates a web environment.
+
+### Testing With a Mock Environment
+
+By default, `@SpringBootTest` does not start the server but instead sets up a mock environment for testing web endpoints.
+With Spring, we can query our web endpoints using class MockMvc, as shown in the following example:
+
+```java
+@AutoConfigureMockMvc
+@SpringBootTest
+class SpringMicroserviceDemoApplicationTests {
+
+    @Autowired
+    MockMvc mockMvc;
+
+   @Test
+    void testWithMockMvc() throws Exception {
+      var result = mockMvc.perform(get("/hello/index"))
+        .andExpect(status().isOk())
+        .andReturn()
+        .getResponse()
+        .getContentAsString();
+
+     assertThat(result, is(equalTo("Hello, world")));
+
+    }
+}
+```
+
+Use annotation `@AutoConfigureMockMvc` for operations with MockMvc.
+
+### Testing with @WebMvcTest
+
+If you want to focus only on the web layer and not start a complete ApplicationContext, consider using `@WebMvcTest` instead.
+`@WebMvcTest` auto-configures the Spring MVC infrastructure and limits scanned beans to `@Controller`-related beans.
+So, if your controller has some dependency to other beans from your service layer, 
+the test won't start until you either load that config yourself or provide a mock for it.
+
+### @MockBean
+
+Use `@MockBean` annotation to mock a bean object.
+Often, `@WebMvcTest` is limited to a single controller and is used in combination with `@MockBean` 
+to provide mock implementations for required dependencies.
+
+
 
 ## Extras
-
-
 
 ### Beans Scope
 A scope of a Bean describes how many instances should the container manage.
@@ -407,15 +465,63 @@ just after the initialization of the Bean properties.
 
 #### @PreDestroy
 
-Similar to @PostConstruct, @PreDestroy can be added to a Bean class's method, 
+Similar to `@PostConstruct`, `@PreDestroy` can be added to a Bean class's method, 
 and it will be called before Spring removes our bean from the application context.
-Using @PreDestroy, you can supply a graceful shutdown for your bean.
+Using `@PreDestroy`, you can supply a graceful shutdown for your bean.
 
+### Lazy Initialization
+
+By default, Spring’s container is created eagerly: it immediately aims to create all beans along with their relationships
+Pros:
+Fail fast: If there are any problems with wiring – they are discovered immediately when the app comes up
+Performance: all beans are up and ready to use during the application lifecycle. No time will be spent for creating a bean as part of the runtime
+
+For heavily created beans, and\or ones that are not sure to encounter during the application lifetime, Spring offers lazy bean creation.
+If the bean is defined as Lazy, Spring will create it only when needed.
+
+```java
+@Component
+@Lazy
+public class MyLazyBean {
+	//…
+}
+
+AnnotationConfigApplicationContext ctx = new 	AnnotationConfigApplicationContext();
+MyLazyBean theBean = ctx.getBean(MyLazyBean.class);
+```
+
+Note:
+- In case the bean is needed for another non-lazy bean – it will still be created eagerly
+- Prototype beans are lazy by definition
+
+
+#### Lazy initialization and @Autowired
+
+```java
+@Component
+@Lazy
+public class MyLazyBean {
+  //…
+}
+@Component
+public class AnotherBean {
+  @Lazy
+  @Autowired
+  private MyLazyBean theLazyBean;
+
+  public MyLazyBean getLazyBean() {
+    return theLazyBean;
+  }
+}
+
+AnotherBean anotherBean = ctx.getBean(AnotherBean.class);
+anotherBean.getLazyBean();
+```
 
 ## General guidelines
 - Use DTOs to transfer data between layers (SoC)
 - Use Lombok to reduce boilerplate code
-- Prefer constructor injection over field injection (remember - you don't need @Autowired)
+- Prefer constructor injection over field injection (remember - you need not use `@Autowired`)
 - Use Java Streams to manipulate collections
 - More to explore
   - Spring AOP for cross-cutting concerns
@@ -423,7 +529,4 @@ Using @PreDestroy, you can supply a graceful shutdown for your bean.
   - `@Scheduled` for scheduled tasks
   - `@Transactional` for transaction management
   - Filters & Interceptors for request/response manipulation
-- Use ObjectMapper to serialize/deserialize objects to/from JSON
-- 
-
-
+- Use _ObjectMapper_ to serialize/deserialize objects to/from JSON

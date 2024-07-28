@@ -1,6 +1,6 @@
 # Spring Boot based Todo app for TDP
 
-## Pre-requisites
+## 0.0 - Pre-requisites
 
 - A working internet connection
   - Proxy settings configured on your machine
@@ -12,10 +12,9 @@
 - Postman
 - Git
 
-
+![HANDS-ON TIME](https://img.shields.io/badge/HANDS--ON%20TIME-F39C12?logo=read-the-docs&logoColor=white)<br>
+![DURATION](https://img.shields.io/badge/DURATION-7h-F39C12?logo=clockify&logoColor=white)
 ## Generate a Spring Boot Project using Maven Initializr
-
-![HANDS-ON TIME](https://img.shields.io/badge/HANDS--ON%20TIME-F39C12?logo=read-the-docs&logoColor=white)
 
 - Go to https://start.spring.io/
 - Add dependencies
@@ -104,6 +103,8 @@ spring:
 
 ## Building our Controller layer and adding our BL (git branch: 02-bl)
 
+![LEARNING TIME](https://img.shields.io/badge/LEARNING%20TIME-00ADEF?logo=read-the-docs&logoColor=white)
+
 ### Request mappings
 `@RequestMapping`, `@GetMapping`, `@PostMapping`, `@PutMapping`, `@DeleteMapping` map web requests to Spring Controller methods.
 
@@ -116,6 +117,8 @@ spring:
 - `ResponseEntity` represents the whole HTTP response: status code, headers, and body. 
   - As a result, we can use it to fully configure the HTTP response. 
   - If we want to use it, we have to return it from the endpoint; Spring takes care of the rest.
+
+<br>![HANDS-ON TIME](https://img.shields.io/badge/HANDS--ON%20TIME-F39C12?logo=read-the-docs&logoColor=white)<br>
 
 - Add `@RequestMapping` to the controller class with the path "/api/todos"
 - Add the following endpoints:
@@ -134,8 +137,12 @@ If a todo doesn't exist, we return 404.
 
 ## Adding error handling (git branch: 03-error-handling)
 
+<br>![HANDS-ON TIME](https://img.shields.io/badge/HANDS--ON%20TIME-F39C12?logo=read-the-docs&logoColor=white)<br>
+
 - First let's refactor our service layer to throw exceptions in case a todo is not found.
   - For that purpose, create an exceptions package and a custom exception class `TodoNotFoundException`
+
+![LEARNING TIME](https://img.shields.io/badge/LEARNING%20TIME-00ADEF?logo=read-the-docs&logoColor=white)
 
 ### `@ExceptionHandler`
 
@@ -151,9 +158,13 @@ public void handleException(CustomException ex) {
 }
 }
 ```
+<br>![HANDS-ON TIME](https://img.shields.io/badge/HANDS--ON%20TIME-F39C12?logo=read-the-docs&logoColor=white)<br>
+
 - Add an exception handler for TodoNotFoundException
   - Create an ErrorDto (String errorCode, String errorMessage) 
   - return a ResponseEntity\<ErrorDto\> with a 404 status code, where errorCode is 100 and errorMessage is the exception message
+
+![LEARNING TIME](https://img.shields.io/badge/LEARNING%20TIME-00ADEF?logo=read-the-docs&logoColor=white)
 
 ### `@ControllerAdvice`
 
@@ -162,6 +173,8 @@ the Spring Boot exception handling will be applied globally for all application 
 `@ControllerAdvice` is an annotation in Spring and, as the name suggests, is “advice” for multiple controllers. 
 It enables the application of a single `@ExceptionHandler` to multiple controllers. 
 With this annotation, we can define how to treat such an exception in a single place, and the system will call this handler for thrown exceptions on classes covered by this `@ControllerAdvice`.
+
+<br>![HANDS-ON TIME](https://img.shields.io/badge/HANDS--ON%20TIME-F39C12?logo=read-the-docs&logoColor=white)<br>
 
 - Add a `@ControllerAdvice` class `RestExceptionHandler`
 - Extend it from `ResponseEntityExceptionHandler`, as it already provides some basic handling of Spring MVC exceptions
@@ -181,6 +194,8 @@ It includes the `@Controller` and `@ResponseBody` annotations, and as a result, 
 `@ResponseBody` is a Spring annotation that binds a method return value to the response body.
 `@ResponseStatus` is a Spring annotation that marks a method or exception class with the status code and reason that should be returned.
 `@RestControllerAdvice` is a specialization of `@ControllerAdvice` that is used to define `@ExceptionHandler` methods that apply to all `@RestController` classes.
+
+<br>![HANDS-ON TIME](https://img.shields.io/badge/HANDS--ON%20TIME-F39C12?logo=read-the-docs&logoColor=white)<br>
 
 - Refactor the controller to use `@RestController` & `@ResponseStatus`
 - Refactor the `@ControllerAdvice` to use `@RestControllerAdvice` & `@ResponseStatus`

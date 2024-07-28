@@ -188,6 +188,8 @@ where errorCode is 101 and errorMessage is the exception message
 
 ## `@RestController`, `@ResponseBody`, `@ResponseStatus` and `@RestControllerAdvice` (git branch: 04-rest-controller)
 
+![LEARNING TIME](https://img.shields.io/badge/LEARNING%20TIME-00ADEF?logo=read-the-docs&logoColor=white)
+
 `@RestController` is a specialized version of the controller.
 It includes the `@Controller` and `@ResponseBody` annotations, and as a result, simplifies the controller implementation.
 
@@ -203,6 +205,8 @@ It includes the `@Controller` and `@ResponseBody` annotations, and as a result, 
 
 
 ## Adding validation (git branch: 05-validation)
+
+![LEARNING TIME](https://img.shields.io/badge/LEARNING%20TIME-00ADEF?logo=read-the-docs&logoColor=white)
 
 Java Bean Validation is the de-facto standard for implementing validation logic in the Java ecosystem. 
 It’s well integrated with Spring and Spring Boot.
@@ -236,6 +240,9 @@ or field to be validated.
 Using those annotations, we can validate a RestController user input.
 There are three things we can validate for any incoming HTTP request: Request body, Path variables, Query parameters.
 
+
+![HANDS-ON TIME](https://img.shields.io/badge/HANDS--ON%20TIME-F39C12?logo=read-the-docs&logoColor=white)<br>
+
 - Add the spring-boot-starter-validation dependency to the pom.xml
 - Add validation annotations to the TodoRequest class
   - title should not be null or empty and also should have a min length of 3 and a max length of 100
@@ -249,6 +256,8 @@ There are three things we can validate for any incoming HTTP request: Request bo
 If a validation of request body fails, a MethodArgumentNotValidException will be triggered. 
 By default, Spring will translate this exception to a HTTP status 400 (Bad Request).
 We can customize the response by adding a custom exception handler.
+
+![HANDS-ON TIME](https://img.shields.io/badge/HANDS--ON%20TIME-F39C12?logo=read-the-docs&logoColor=white)<br>
 
 - Add a custom exception handler for MethodArgumentNotValidException in the @RestControllerAdvice class like so:
 
@@ -284,6 +293,8 @@ we can add a custom exception handler.
 
 ## Configuration (git branch: 06-configuration)
 
+![LEARNING TIME](https://img.shields.io/badge/LEARNING%20TIME-00ADEF?logo=read-the-docs&logoColor=white)
+
 There are different options to store or apply configuration in Spring Boot, including:
 - application.properties or application.yml
 - Environment variables
@@ -317,6 +328,8 @@ For example, app-name in the properties file can be mapped to appName in the bea
 The `Environment` object is a Spring abstraction that represents the environment in which the current application is running.
 It provides methods to access properties from the application.properties or application.yml file, 
 as well as environment variables.
+
+![HANDS-ON TIME](https://img.shields.io/badge/HANDS--ON%20TIME-F39C12?logo=read-the-docs&logoColor=white)<br>
 
 - Add a MetaController with a request mapping /api/meta
 - Create the following yaml section:
@@ -385,6 +398,8 @@ to use the DB_USERNAME and DB_PASSWORD environment variables respectively
 - Test your endpoints and make sure everything works as expected
 
 ## Testing (git branch: 08-testing)
+
+![LEARNING TIME](https://img.shields.io/badge/LEARNING%20TIME-00ADEF?logo=read-the-docs&logoColor=white)
 
 _Spring Boot_ provides several utilities and annotations to help when testing your application.
 Most developers use the spring-boot-starter-test “Starter”, which imports (in the test scope):
@@ -455,10 +470,10 @@ Singleton (default) – the bean’s instance is created exactly once, and the s
 Prototype – whenever an instance of a certain bean is requested – a new instance of it will be created
 
 The last four scopes are only available in a web-aware application:
-Request – per Http call
-Session – per user session
-Application – per servlet context
-WebSocket - per web socket connection
+- Request – per Http call
+- Session – per user session
+- Application – per servlet context
+- WebSocket - per web socket connection
 
 To define a bean’s scope, we can use the `@Scope` annotation.
 

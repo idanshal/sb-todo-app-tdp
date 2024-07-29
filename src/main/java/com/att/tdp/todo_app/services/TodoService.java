@@ -34,6 +34,7 @@ public class TodoService {
         TodoEntity todo = new TodoEntity();
         todo.setTitle(todoRequest.getTitle());
         todo.setDescription(todoRequest.getDescription());
+        todo.setIsCompleted(false);
         return todoRepository.save(todo);
     }
 
@@ -48,7 +49,7 @@ public class TodoService {
         }
 
         if (todoRequest.getIsCompleted() != null) {
-            updatedTodo.setCompleted(todoRequest.getIsCompleted());
+            updatedTodo.setIsCompleted(todoRequest.getIsCompleted());
         }
 
         todoRepository.save(updatedTodo);

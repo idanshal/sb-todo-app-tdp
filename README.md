@@ -1,3 +1,88 @@
+# Practical Spring Boot for TDP
+
+## Inversion of Control (IoC) and Dependency Injection (DI) in Spring
+
+- The core of the Spring framework is the IoC (Inversion of Control) Container.
+It creates the objects, configures and assembles their dependencies, and manages their entire life cycle.
+- The Container uses Dependency Injection(DI) to manage the components that make up the application.
+It gets information about the objects from the Java Code and Annotations.
+
+## Spring Terminology
+
+- Bean – the managed object (instance) by Spring.
+  - Spring manages bean creation\destruction
+  - Spring manages bean dependencies (by injection)
+  - Spring manages bean scope (singleton or prototype)
+- Container – the core of Spring. It creates the objects (Beans), configures and assembles their dependencies, manages their entire life cycle.
+
+## ApplicationContext
+
+ApplicationContext is the Spring interface representing the IoC container. ApplicationContext holds all beans and manages them.
+To obtain a bean from ApplicationContext, use the getBean() function and specify bean ID or interface\class. In case of no ambiguity – Spring will automatically know which bean to extract for you.
+
+```java
+ApplicationContext ctx = new AnnotationConfigApplicationContext(
+				"com.att.course.spring.demo.components");
+
+MyBean bean1 = ctx.getBean(MyBean.class);
+MyBean bean2 = ctx.getBean("MyBean");
+```
+
+![SpringIoC](course_data/images/spring_ioc.png)
+
+## Spring Beans configuration
+
+- An application should provide the bean configuration to the ApplicationContext container. A Spring bean configuration consists of one or more beans definitions.
+- Spring supports different ways of configuring beans
+  - `@Bean`-annotated methods within a `@Configuration` class
+  - `@Component`-annotated classes
+
+### `@Bean`-annotated methods within a `@Configuration` class
+
+- A class annotated with `@Configuration` indicates that it contains Spring Bean configurations.
+- The `@Bean` annotation on a method indicates that the method creates a Spring Bean.
+
+```java
+public class MyComponent {
+	// the component code
+}
+
+@Configuration
+public class ComponentsConfig {
+	@Bean
+	public MyComponent myComponent() { 
+		return new MyComponent();
+	}
+}
+
+ApplicationContext ctx = new AnnotationConfigApplicationContext(ComponentsConfig.class);
+MyComponent comp = ctx.getBean(MyComponent.class);
+```
+### `@Component`-annotated classes
+
+- Mark a class by one from the Spring annotations: `@Component`, `@Controller`, `@Service`, and `@Repository`.
+  - `@Controller`, `@Service` and `@Repository` are special types of `@Component` annotation.
+- Spring will automatically detect these classes as beans.
+
+```java
+@Component
+public class MyComponent {
+	// the component code
+}
+
+ApplicationContext ctx = new AnnotationConfigApplicationContext("com.att.course.spring.demo.components");
+MyComponent comp = ctx.getBean(MyComponent.class);
+```
+
+### `@Bean` vs `@Component`
+
+- `@Component` is a class-level annotation used to auto-detect and auto-configure beans using classpath scanning.
+  There's an implicit one-to-one mapping between the annotated class and the bean (i.e., one bean per class).
+- `@Bean` is a method-level annotation, it is used to explicitly declare a single bean.
+  You can use it, for example, to wire components from 3rd-party libraries (you don't have the source code so you can't annotate its classes with `@Component`), so automatic configuration is not possible.
+
+
+
 # Spring Boot based Todo app for TDP
 
 ## 0.0 - Pre-requisites
@@ -12,7 +97,6 @@
 - Postman
 - Git
 
-![HANDS-ON TIME](https://img.shields.io/badge/HANDS--ON%20TIME-F39C12?logo=read-the-docs&logoColor=white)<br>
 ![DURATION](https://img.shields.io/badge/DURATION-7h-F39C12?logo=clockify&logoColor=white)
 ## Generate a Spring Boot Project using Maven Initializr
 

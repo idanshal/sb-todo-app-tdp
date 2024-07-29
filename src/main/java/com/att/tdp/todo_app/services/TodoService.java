@@ -48,7 +48,7 @@ public class TodoService {
         }
 
         if (todoRequest.getIsCompleted() != null) {
-            updatedTodo.setCompleted(todoRequest.getIsCompleted());
+            updatedTodo.setIsCompleted(todoRequest.getIsCompleted());
         }
 
         todoRepository.save(updatedTodo);

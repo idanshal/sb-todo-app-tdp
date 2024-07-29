@@ -9,16 +9,16 @@ It gets information about the objects from the Java Code and Annotations.
 
 ## Spring Terminology
 
-- Bean – the managed object (instance) by Spring.
+- **Bean** – the managed object (instance) by Spring.
   - Spring manages bean creation\destruction
   - Spring manages bean dependencies (by injection)
   - Spring manages bean scope (singleton or prototype)
-- Container – the core of Spring. It creates the objects (Beans), configures and assembles their dependencies, manages their entire life cycle.
+- **Container** – the core of _Spring_. It creates the objects (Beans), configures and assembles their dependencies, manages their entire life cycle.
 
 ## ApplicationContext
 
-ApplicationContext is the Spring interface representing the IoC container. ApplicationContext holds all beans and manages them.
-To obtain a bean from ApplicationContext, use the getBean() function and specify bean ID or interface\class. In case of no ambiguity – Spring will automatically know which bean to extract for you.
+ApplicationContext is the _Spring_ interface representing the IoC container. ApplicationContext holds all beans and manages them.
+To obtain a bean from ApplicationContext, use the getBean() function and specify bean ID or interface\class. In case of no ambiguity – _Spring_ will automatically know which bean to extract for you.
 
 ```java
 ApplicationContext ctx = new AnnotationConfigApplicationContext(
@@ -33,7 +33,7 @@ MyBean bean2 = ctx.getBean("MyBean");
 ## Spring Beans configuration
 
 - An application should provide the bean configuration to the ApplicationContext container. A Spring bean configuration consists of one or more beans definitions.
-- Spring supports different ways of configuring beans
+- _Spring_ supports different ways of configuring beans
   - `@Bean`-annotated methods within a `@Configuration` class
   - `@Component`-annotated classes
 
@@ -82,6 +82,44 @@ MyComponent comp = ctx.getBean(MyComponent.class);
   You can use it, for example, to wire components from 3rd-party libraries (you don't have the source code so you can't annotate its classes with `@Component`), so automatic configuration is not possible.
 
 
+## DI in _Spring_
+
+### Constructor Injection
+```java
+@Component
+public class Component1 {
+// the Component1 code
+}
+
+@Component
+public class Component2 {
+
+	private Component1 comp1;
+	
+	public Component2(Component1 comp1) {
+		    	this.comp1 = comp1;
+	}
+}
+```
+
+### Field Injection
+
+```java
+@Component
+public class Component1 {
+	// the Component1 code
+}
+
+@Component
+public class Component2 {
+	@Autowired private Component1 component1;
+	public Component2() {}
+}
+```
+
+
+
+
 
 # Spring Boot based Todo app for TDP
 
@@ -98,7 +136,7 @@ MyComponent comp = ctx.getBean(MyComponent.class);
 - Git
 
 ![DURATION](https://img.shields.io/badge/DURATION-7h-F39C12?logo=clockify&logoColor=white)
-## Generate a Spring Boot Project using Maven Initializr
+## Generate a _Spring Boot_ Project using _spring initializr_
 
 - Go to https://start.spring.io/
 - Add dependencies
@@ -110,8 +148,8 @@ MyComponent comp = ctx.getBean(MyComponent.class);
 ![spring initializr](course_data/images/spring_initializr_screenshot.png)
 
 ## Project structure
-- Open project in Intellij IDE
-- Review project files structure
+- Open the project in _Intellij IDEA_
+- Review the project files structure
 - Review pom.xml
   - Inspect dependencies
 - Review `@SpringBootApplication`
@@ -128,17 +166,16 @@ public class TodoAppApplication {
 
 ## Compile & Run
 - Verify the application compiles and runs successfully
-  - View logs in the console
-  - Note that application server (Tomcat) starts on port 8080
-- Review application.yml and set the port to 8081
+  - View logs in the console ![app start logs](course_data/images/app_start_logs.png)
+    - Note that application server (Tomcat) starts on port 8080
+- Review application.yml and set the port to 8081. Restart the application and verify it starts on port 8081
 ```yaml
 server:
   port: 8081
 ```
-- Add packages: dto, controllers, services, dal
 
-  
 ## Define models and entities
+- Add packages: dto, controllers, services, dal
 - Create TodoRequest (String title, String description, Boolean isCompleted)
 - Create TodoEntity (Long id, String title, String description, Boolean isCompleted)
 
@@ -150,7 +187,7 @@ public interface TodoRepository extends JpaRepository<TodoEntity, Long> {
 ```
 
 ## Configure Database
-We will work with the H2 in-memory database for this project.
+We will work with the _H2_ in-memory database for this project.
 - Add the following yaml section to application.yml 
 ```yaml
 spring:
@@ -166,7 +203,7 @@ spring:
     hibernate:
       ddl-auto: update
 ```
-- Run the application and access the H2 console at http://localhost:8081/h2-console
+- Run the application and access the _H2_ console at http://localhost:8081/h2-console
 - Verify you have an empty TODO_ENTITY table
 
 ## Play with DI (git branch: 01-di)

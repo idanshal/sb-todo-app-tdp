@@ -117,9 +117,146 @@ public class Component2 {
 }
 ```
 
+### Setter Injection
+
+```java
+@Component
+public class Component1 {
+	// the Component1 code
+}
+
+@Component
+public class Component2 {
+	private Component1 component1;
+	
+	@Autowired
+	public void setComponent1(Component1 component1) {
+		this.component1 = component1;
+	}
+}
+```
 
 
+### Ctor vs Field vs Setter Injection
 
+- Why prefer Constructor Injection:
+  - An object must be created with the full and correct state.
+  - The app can define for the object a mock dependency in a unit test.
+  - An object can be specified as immutable (for example, to gain thread safety).
+- Why prefer Field Injection:
+  - The more readable code; allows focusing on business logic.
+  - When some of the object’s properties could be optional.
+- Why prefer Setter Injection:
+  - When you need some “smart setter”, for example, for additional validation.
+
+Note: Constructor Injection is the most straightforward and recommended way of dependency injection!
+
+### `@Autowired`
+
+- Spring `@Autowired` annotation is used for automatic dependency injection. Using the annotation, we instruct Spring to inject the bean “auto-magically”.
+The process of Spring bean injection is called autowiring.
+- `@Autowired` is generally used for field and setter injection. It can also be used with a constructor, to denote to Spring that this is the constructor to use for bean creation. But classes with a single constructor can omit the `@Autowired` annotation.
+- `@Autowired` on fields happens AFTER calling the constructor.
+- `@Autowired` is by default required and will fail in the case cannot be fulfilled. Change it by adding `@Autowired(required = false)`
+
+By default, Spring resolves @Autowired entries by type.
+
+```java
+@Configuration
+public class ComponentsConfig {
+    @Bean
+    public Component getComponent() {
+       return new Component();
+	}
+}
+```
+
+```java
+@Component
+public class Component { 
+// …
+}
+```
+
+```java
+@Component
+public class AnotherComponent {
+	private Component comp;
+	 AnotherComponent(Component comp) {
+		this.comp = comp;
+	}
+}
+```
+
+### Autowire Disambiguation
+If more than one bean of the same type is available in the container, the framework will throw a fatal exception.
+To resolve this conflict, we need to tell Spring explicitly which bean we want to inject.
+
+#### Autowiring by @Qualifier
+
+```java
+public class MyComponent extends BaseComponent {
+  // some code
+}
+
+@Configuration
+public class ComponentConfig {
+  @Bean("component1")
+  public BaseComponent component1() {
+    return new Component(param1);
+  }
+  @Bean("component2")
+  public BaseComponent component2() {
+    return new Component(param2);
+  }
+}
+```
+
+```java
+@Component
+public class AnotherComponent {
+	private BaseComponent comp1;
+	private BaseComponent comp2;
+
+	AnotherComponent(@Qualifier("component1") BaseComponent comp1, @Qualifier("component2") BaseComponent comp2) {
+	  this.comp1 = comp1;
+	  this.comp2 = comp2;
+	}
+}
+```
+
+#### Autowiring by Name
+
+```java
+public class MyComponent extends BaseComponent {
+}
+
+@Configuration
+public class ComponentsConfig {
+    @Bean("myComponent")
+    public BaseComponent getMyComponent() {
+ 		return new MyComponent();
+	}
+}
+```
+
+```java
+@Component("myComponent")
+public class MyComponent extends BaseComponent {
+    // some code
+}
+```
+
+```java
+@Component
+public class AnotherComponent {
+	private BaseComponent baseComponent;
+
+    AnotherComponent(BaseComponent myComponent) {
+		this.baseComponent = myComponent;
+	}
+}
+```
 
 # Spring Boot based Todo app for TDP
 

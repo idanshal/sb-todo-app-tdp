@@ -3,7 +3,6 @@ package com.att.tdp.todo_app.services;
 import com.att.tdp.todo_app.dal.TodoRepository;
 import com.att.tdp.todo_app.dto.TodoEntity;
 import com.att.tdp.todo_app.dto.TodoRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,6 +29,7 @@ public class TodoService {
         TodoEntity todo = new TodoEntity();
         todo.setTitle(todoRequest.getTitle());
         todo.setDescription(todoRequest.getDescription());
+        todo.setIsCompleted(false);
         return todoRepository.save(todo);
     }
 
@@ -49,7 +49,7 @@ public class TodoService {
         }
 
         if (todoRequest.getIsCompleted() != null) {
-            updatedTodo.setCompleted(todoRequest.getIsCompleted());
+            updatedTodo.setIsCompleted(todoRequest.getIsCompleted());
         }
 
         todoRepository.save(updatedTodo);

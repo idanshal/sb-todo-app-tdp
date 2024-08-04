@@ -310,13 +310,15 @@ server:
   port: 8081
 ```
 
-## Define models and entities
-- Add packages: dto, controllers, services, dal
-- Create CreateTodoRequest (String title, String description)
-- Create UpdateTodoRequest (String title, String description, Boolean isCompleted)
-- Create TodoEntity (Long id, String title, String description, boolean isCompleted)
+## Define TodoEntity
+- Add dto package
+  - Create TodoEntity (Long id, String title, String description, boolean isCompleted) - setters & getters
 
 ## Create TodoRepository
+
+- Create dal package
+    - Create TodoRepository:
+
 ```java
 @Repository
 public interface TodoRepository extends JpaRepository<TodoEntity, Long> {
@@ -348,8 +350,10 @@ spring:
 `@Component` is a generic stereotype for any Spring-managed component.
 `@Repository`, `@Service`, and `@Controller` are specializations of `@Component` for more specific use cases (in the persistence, service, and presentation layers, respectively).
 
-- Create TodoController
-- Create TodoService
+- create a controllers package
+  - create TodoController (annotated with `@Controller`)
+- create a services package
+  - create TodoService (annotated with `@Service`)
 - Instruct Spring to manage instances of both classes
 - Instruct Spring to inject TodoService into TodoController
 - Remove `@Autowired` from class member dependency
@@ -378,6 +382,9 @@ spring:
 
 <br>![HANDS-ON TIME](https://img.shields.io/badge/HANDS--ON%20TIME-F39C12?logo=read-the-docs&logoColor=white)<br>
 
+- Create request models
+  - Create CreateTodoRequest (String title, String description) - setters & getters
+  - Create UpdateTodoRequest (String title, String description, Boolean isCompleted) - setters & getters 
 - Add `@RequestMapping` to the controller class with the path "/api/todos"
 - Add the following endpoints:
 

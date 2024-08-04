@@ -1,7 +1,7 @@
 package com.att.tdp.todo_app.controllers;
 
 import com.att.tdp.todo_app.dto.TodoEntity;
-import com.att.tdp.todo_app.dto.TodoRequest;
+import com.att.tdp.todo_app.dto.CreateTodoRequest;
 import com.att.tdp.todo_app.services.TodoService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
@@ -39,12 +39,12 @@ public class TodoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public TodoEntity createTodo(@RequestBody @Valid TodoRequest todoRequest) {
-        return todoService.createTodo(todoRequest);
+    public TodoEntity createTodo(@RequestBody @Valid CreateTodoRequest createTodoRequest) {
+        return todoService.createTodo(createTodoRequest);
     }
 
     @PutMapping("/{id}")
-    public TodoEntity updateTodo(@PathVariable @Positive Long id, @RequestBody @Valid TodoRequest todoRequest) {
+    public TodoEntity updateTodo(@PathVariable @Positive Long id, @RequestBody @Valid CreateTodoRequest todoRequest) {
         return todoService.updateTodo(id, todoRequest);
     }
 

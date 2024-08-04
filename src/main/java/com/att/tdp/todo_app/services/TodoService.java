@@ -2,7 +2,8 @@ package com.att.tdp.todo_app.services;
 
 import com.att.tdp.todo_app.dal.TodoRepository;
 import com.att.tdp.todo_app.dto.TodoEntity;
-import com.att.tdp.todo_app.dto.TodoRequest;
+import com.att.tdp.todo_app.dto.CreateTodoRequest;
+import com.att.tdp.todo_app.dto.UpdateTodoRequest;
 import com.att.tdp.todo_app.exceptions.TodoNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,26 +29,26 @@ public class TodoService {
         return todo.get();
     }
 
-    public TodoEntity createTodo(TodoRequest todoRequest) {
+    public TodoEntity createTodo(CreateTodoRequest createTodoRequest) {
         TodoEntity todo = new TodoEntity();
-        todo.setTitle(todoRequest.getTitle());
-        todo.setDescription(todoRequest.getDescription());
-        todo.setIsCompleted(false);
+        todo.setTitle(createTodoRequest.getTitle());
+        todo.setDescription(createTodoRequest.getDescription());
+        todo.setCompleted(false);
         return todoRepository.save(todo);
     }
 
-    public TodoEntity updateTodo(Long id, TodoRequest todoRequest) {
+    public TodoEntity updateTodo(Long id, UpdateTodoRequest updateTodoRequest) {
         TodoEntity updatedTodo = getTodo(id);
-        if (todoRequest.getTitle() != null) {
-            updatedTodo.setTitle(todoRequest.getTitle());
+        if (updateTodoRequest.getTitle() != null) {
+            updatedTodo.setTitle(updateTodoRequest.getTitle());
         }
 
-        if (todoRequest.getDescription() != null) {
-            updatedTodo.setDescription(todoRequest.getDescription());
+        if (updateTodoRequest.getDescription() != null) {
+            updatedTodo.setDescription(updateTodoRequest.getDescription());
         }
 
-        if (todoRequest.getIsCompleted() != null) {
-            updatedTodo.setIsCompleted(todoRequest.getIsCompleted());
+        if (updateTodoRequest.getIsCompleted() != null) {
+            updatedTodo.setCompleted(updateTodoRequest.getIsCompleted());
         }
 
         todoRepository.save(updatedTodo);

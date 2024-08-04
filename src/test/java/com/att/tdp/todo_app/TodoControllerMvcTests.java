@@ -1,22 +1,17 @@
 package com.att.tdp.todo_app;
 
 import com.att.tdp.todo_app.controllers.TodoController;
-import com.att.tdp.todo_app.dal.TodoRepository;
 import com.att.tdp.todo_app.dto.TodoEntity;
-import com.att.tdp.todo_app.dto.TodoRequest;
+import com.att.tdp.todo_app.dto.CreateTodoRequest;
+import com.att.tdp.todo_app.dto.UpdateTodoRequest;
 import com.att.tdp.todo_app.services.TodoService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.ApplicationContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -57,7 +52,7 @@ class TodoControllerMvcTests {
 
     @Test
     void testCreateTodo() throws Exception {
-        TodoRequest request = new TodoRequest();
+        CreateTodoRequest request = new CreateTodoRequest();
         request.setTitle("dummy");
         request.setDescription("dummy");
 
@@ -77,14 +72,14 @@ class TodoControllerMvcTests {
 
     @Test
     void testUpdateTodo() throws Exception {
-        TodoRequest request = new TodoRequest();
+        CreateTodoRequest request = new CreateTodoRequest();
         request.setTitle("Updated Title");
 
         TodoEntity todo = new TodoEntity();
         todo.setId(1L);
         todo.setTitle("Updated Title");
 
-        when(todoService.updateTodo(eq(1L), any(TodoRequest.class))).thenReturn(todo);
+        when(todoService.updateTodo(eq(1L), any(UpdateTodoRequest.class))).thenReturn(todo);
 
         mockMvc.perform(put("/api/todos/1")
                         .contentType(MediaType.APPLICATION_JSON)

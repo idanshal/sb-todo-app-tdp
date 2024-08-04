@@ -11,8 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-public class TodoRequest {
-
+public class CreateTodoRequest {
     @NotBlank
     @Size(min = 3, max = 100)
     private String title;
@@ -20,6 +19,4 @@ public class TodoRequest {
     @NotBlank
     @Size(max = 300)
     private String description;
-
-    private Boolean isCompleted;
 }

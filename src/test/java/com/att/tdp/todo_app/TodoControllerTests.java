@@ -7,13 +7,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -24,6 +23,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest // used for loading the full application context for integration tests.
 @AutoConfigureMockMvc // used for configuring MockMvc for testing web layer components in a Spring Boot application
 class TodoControllerTests {
+
+    //TODO!!!
+    // fix deleteTodo in all branches
+    // add tests for validation, error handling, empty list
 
     @Autowired
     private MockMvc mockMvc;
@@ -53,10 +56,10 @@ class TodoControllerTests {
 
     @Test
     void testGetTodo() throws Exception {
-        todoRepository.save(TodoTestHelper.createTodoEntity("Learn something new", "Read a book"));
-        mockMvc.perform(get("/api/todos/1"))
+        TodoEntity savedTodo = todoRepository.save(TodoTestHelper.createTodoEntity("Learn something new", "Read a book"));
+        mockMvc.perform(get("/api/todos/%d".formatted(savedTodo.getId())))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1L));
+                .andExpect(jsonPath("$.id").value(savedTodo.getId()));
     }
 
     @Test
@@ -86,10 +89,11 @@ class TodoControllerTests {
 
     @Test
     void testDeleteTodo() throws Exception {
-        TodoEntity todo = new TodoEntity();
-        todoRepository.save(todo);
+        TodoEntity savedTodo = todoRepository.save(TodoTestHelper.createTodoEntity("delete this todo", "just delete it"));
 
-        mockMvc.perform(delete("/api/todos/" + todo.getId()))
+        mockMvc.perform(delete("/api/todos/" + savedTodo.getId()))
                 .andExpect(status().isNoContent());
+
+        assertThat(todoRepository.existsById(savedTodo.getId())).isFalse();
     }
 }

@@ -136,7 +136,6 @@ public class Component2 {
 }
 ```
 
-
 ### Ctor vs Field vs Setter Injection
 
 - Why prefer Constructor Injection:

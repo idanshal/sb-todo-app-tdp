@@ -2,6 +2,7 @@ package com.att.tdp.todo_app.controllers;
 
 import com.att.tdp.todo_app.dto.TodoEntity;
 import com.att.tdp.todo_app.dto.CreateTodoRequest;
+import com.att.tdp.todo_app.dto.UpdateTodoRequest;
 import com.att.tdp.todo_app.services.TodoService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
@@ -44,8 +45,8 @@ public class TodoController {
     }
 
     @PutMapping("/{id}")
-    public TodoEntity updateTodo(@PathVariable @Positive Long id, @RequestBody @Valid CreateTodoRequest todoRequest) {
-        return todoService.updateTodo(id, todoRequest);
+    public TodoEntity updateTodo(@PathVariable @Positive Long id, @RequestBody @Valid UpdateTodoRequest updateTodoRequest) {
+        return todoService.updateTodo(id, updateTodoRequest);
     }
 
     @DeleteMapping("/{id}")

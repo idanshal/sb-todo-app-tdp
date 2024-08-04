@@ -312,8 +312,9 @@ server:
 
 ## Define models and entities
 - Add packages: dto, controllers, services, dal
-- Create TodoRequest (String title, String description, Boolean isCompleted)
-- Create TodoEntity (Long id, String title, String description, Boolean isCompleted)
+- Create CreateTodoRequest (String title, String description)
+- Create UpdateTodoRequest (String title, String description, Boolean isCompleted)
+- Create TodoEntity (Long id, String title, String description, boolean isCompleted)
 
 ## Create TodoRepository
 ```java

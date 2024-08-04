@@ -1,11 +1,9 @@
 package com.att.tdp.todo_app.controllers;
 
-import com.att.tdp.todo_app.dto.ErrorDto;
 import com.att.tdp.todo_app.dto.TodoEntity;
-import com.att.tdp.todo_app.dto.TodoRequest;
-import com.att.tdp.todo_app.exceptions.TodoNotFoundException;
+import com.att.tdp.todo_app.dto.CreateTodoRequest;
+import com.att.tdp.todo_app.dto.UpdateTodoRequest;
 import com.att.tdp.todo_app.services.TodoService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -46,14 +44,14 @@ public class TodoController {
     }
 
     @PostMapping
-    public ResponseEntity<TodoEntity> createTodo(@RequestBody TodoRequest todoRequest) {
-        TodoEntity todo = todoService.createTodo(todoRequest);
+    public ResponseEntity<TodoEntity> createTodo(@RequestBody CreateTodoRequest createTodoRequest) {
+        TodoEntity todo = todoService.createTodo(createTodoRequest);
         return ResponseEntity.ok(todo);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TodoEntity> updateTodo(@PathVariable Long id, @RequestBody TodoRequest todoRequest) {
-        TodoEntity updatedTodo = todoService.updateTodo(id, todoRequest);
+    public ResponseEntity<TodoEntity> updateTodo(@PathVariable Long id, @RequestBody UpdateTodoRequest updateTodoRequest) {
+        TodoEntity updatedTodo = todoService.updateTodo(id, updateTodoRequest);
         return ResponseEntity.ok(updatedTodo);
     }
 

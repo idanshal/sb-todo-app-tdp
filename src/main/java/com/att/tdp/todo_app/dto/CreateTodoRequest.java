@@ -1,9 +1,8 @@
 package com.att.tdp.todo_app.dto;
 
-public class TodoRequest {
+public class CreateTodoRequest {
     private String title;
     private String description;
-    private Boolean isCompleted;
 
     public String getTitle() {
         return title;
@@ -19,13 +18,5 @@ public class TodoRequest {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Boolean getIsCompleted() {
-        return isCompleted;
-    }
-
-    public void setIsCompleted(Boolean isCompleted) {
-        this.isCompleted = isCompleted;
     }
 }

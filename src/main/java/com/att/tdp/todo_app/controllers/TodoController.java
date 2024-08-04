@@ -1,10 +1,11 @@
 package com.att.tdp.todo_app.controllers;
 
 import com.att.tdp.todo_app.dto.TodoEntity;
-import com.att.tdp.todo_app.dto.TodoRequest;
+import com.att.tdp.todo_app.dto.CreateTodoRequest;
+import com.att.tdp.todo_app.dto.UpdateTodoRequest;
 import com.att.tdp.todo_app.services.TodoService;
+import org.hibernate.sql.Update;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,13 +37,13 @@ public class TodoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public TodoEntity createTodo(@RequestBody TodoRequest todoRequest) {
-        return todoService.createTodo(todoRequest);
+    public TodoEntity createTodo(@RequestBody CreateTodoRequest createTodoRequest) {
+        return todoService.createTodo(createTodoRequest);
     }
 
     @PutMapping("/{id}")
-    public TodoEntity updateTodo(@PathVariable Long id, @RequestBody TodoRequest todoRequest) {
-        return todoService.updateTodo(id, todoRequest);
+    public TodoEntity updateTodo(@PathVariable Long id, @RequestBody UpdateTodoRequest updateTodoRequest) {
+        return todoService.updateTodo(id, updateTodoRequest);
     }
 
     @DeleteMapping("/{id}")

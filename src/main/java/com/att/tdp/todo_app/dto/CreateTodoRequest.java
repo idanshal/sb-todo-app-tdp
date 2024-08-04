@@ -3,7 +3,7 @@ package com.att.tdp.todo_app.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public class TodoRequest {
+public class CreateTodoRequest {
 
     @NotBlank
     @Size(min = 3, max = 100)
@@ -12,8 +12,6 @@ public class TodoRequest {
     @NotBlank
     @Size(max = 300)
     private String description;
-
-    private Boolean isCompleted;
 
     public String getTitle() {
         return title;
@@ -29,13 +27,5 @@ public class TodoRequest {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Boolean getIsCompleted() {
-        return isCompleted;
-    }
-
-    public void setIsCompleted(Boolean isCompleted) {
-        this.isCompleted = isCompleted;
     }
 }

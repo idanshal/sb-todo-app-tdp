@@ -351,11 +351,11 @@ spring:
 `@Repository`, `@Service`, and `@Controller` are specializations of `@Component` for more specific use cases (in the persistence, service, and presentation layers, respectively).
 
 - create a controllers package
-  - create TodoController (annotated with `@Controller`)
+  - create TodoController
 - create a services package
-  - create TodoService (annotated with `@Service`)
+  - create TodoService 
 - Instruct Spring to manage instances of both classes
-- Instruct Spring to inject TodoService into TodoController
+- Instruct Spring to inject TodoService into TodoController (field injection)
 - Remove `@Autowired` from class member dependency
   - Observe dependency is null
 - Remove `@Service` from dependency class

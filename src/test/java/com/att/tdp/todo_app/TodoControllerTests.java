@@ -26,7 +26,10 @@ class TodoControllerTests {
 
     //TODO!!!
     // fix deleteTodo in all branches
+    // change behavior of delete to actually delete AND silently ignore errors and add that do readme
     // add tests for validation, error handling, empty list
+    // check assertj core api for more assertions
+    // add assertions for db besides API
 
     @Autowired
     private MockMvc mockMvc;

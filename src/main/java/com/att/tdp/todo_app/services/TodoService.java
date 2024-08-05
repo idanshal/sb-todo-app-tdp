@@ -57,12 +57,7 @@ public class TodoService {
         return updatedTodo;
     }
 
-    public Long deleteTodo(Long id) {
-        if (todoRepository.findById(id).isPresent()) {
-            todoRepository.deleteById(id);
-            return id;
-        }
-
-        return null;
+    public void deleteTodo(Long id) {
+        todoRepository.deleteById(id);
     }
 }

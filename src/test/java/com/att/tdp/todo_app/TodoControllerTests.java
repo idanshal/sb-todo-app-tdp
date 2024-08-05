@@ -30,6 +30,7 @@ class TodoControllerTests {
     // add tests for validation, error handling, empty list
     // check assertj core api for more assertions
     // add assertions for db besides API
+    // add DataJPATest (+add to readme)
 
     @Autowired
     private MockMvc mockMvc;

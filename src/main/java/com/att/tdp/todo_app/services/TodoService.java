@@ -55,9 +55,7 @@ public class TodoService {
         return updatedTodo;
     }
 
-    public Long deleteTodo(Long id) {
-        TodoEntity todo = getTodo(id);
-        todoRepository.deleteById(todo.getId());
-        return todo.getId();
+    public void deleteTodo(Long id) {
+        todoRepository.deleteById(id);
     }
 }

@@ -2,6 +2,7 @@ package com.att.tdp.todo_app;
 
 import com.att.tdp.todo_app.dal.TodoRepository;
 import com.att.tdp.todo_app.dto.TodoEntity;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,19 +37,24 @@ class TodoControllerTests {
     @Autowired
     private TodoRepository todoRepository;
 
-    @BeforeEach // used to run a method before each test method in the class.
+    @BeforeEach
+        // used to run a method before each test method in the class.
     void setup() {
         todoRepository.deleteAll();
     }
 
     @Test
-    void testGetTodos() throws Exception {
-        //String actualResponseBody = mvcResult.getResponse().getContentAsString();
+    @SneakyThrows
+    void testGetTodosSuccess() {
+        //arrange
         todoRepository.saveAll(List.of(
                 TodoTestHelper.createTodoEntity("Do laundry", "Wash clothes"),
                 TodoTestHelper.createTodoEntity("Do dishes", "Wash dishes")
         ));
+
+        //act
         mockMvc.perform(get("/api/todos"))
+                //assert
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[*].title", containsInAnyOrder("Do laundry", "Do dishes")));
@@ -56,43 +62,61 @@ class TodoControllerTests {
 
 
     @Test
-    void testGetTodo() throws Exception {
+    @SneakyThrows
+    void testGetTodoSuccess() {
+        // arrange
         TodoEntity savedTodo = todoRepository.save(TodoTestHelper.createTodoEntity("Learn something new", "Read a book"));
+        // act
         mockMvc.perform(get("/api/todos/%d".formatted(savedTodo.getId())))
+                // assert
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(savedTodo.getId()));
     }
 
     @Test
-    void testCreateTodo() throws Exception {
+    @SneakyThrows
+    void testCreateTodoSuccess() {
+        // act
         mockMvc.perform(post("/api/todos")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 {"title":"Test","description":"Test Description"}
                                 """))
+                // assert
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.title").value("Test"));
+
+        assertThat(todoRepository.findAll()).hasSize(1);
     }
 
     @Test
     void testUpdateTodo() throws Exception {
+
+        // arrange
         TodoEntity todo = new TodoEntity();
         todo.setTitle("Old Title");
         todo.setDescription("Some description");
         todoRepository.save(todo);
 
+        // act
         mockMvc.perform(put("/api/todos/" + todo.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"title\":\"Updated Title\"}"))
+                // assert
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value("Updated Title"));
+
+        assertThat(todoRepository.findById(todo.getId()).get().getTitle()).isEqualTo("Updated Title");
     }
 
     @Test
     void testDeleteTodo() throws Exception {
+        // arrange
         TodoEntity savedTodo = todoRepository.save(TodoTestHelper.createTodoEntity("delete this todo", "just delete it"));
 
+        // act
         mockMvc.perform(delete("/api/todos/" + savedTodo.getId()))
+                // assert
                 .andExpect(status().isNoContent());
 
         assertThat(todoRepository.existsById(savedTodo.getId())).isFalse();

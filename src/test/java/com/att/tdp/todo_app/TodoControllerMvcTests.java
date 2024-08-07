@@ -7,6 +7,7 @@ import com.att.tdp.todo_app.dto.UpdateTodoRequest;
 import com.att.tdp.todo_app.exceptions.RestExceptionHandler;
 import com.att.tdp.todo_app.services.TodoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -38,20 +39,29 @@ class TodoControllerMvcTests {
     private TodoService todoService;
 
     @Test
-    void testGetTodos() throws Exception {
+    void testEmptyTodosSuccess() throws Exception {
+        // arrange
         when(todoService.getTodos()).thenReturn(Collections.emptyList());
+        // act
         mockMvc.perform(get("/api/todos"))
+                // assert
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isEmpty());
     }
 
     @Test
-    void testInvalidGetTodo() throws Exception {
-        mockMvc.perform(get("/api/todos/-1")).andExpect(status().is4xxClientError());
+    @SneakyThrows
+    void testGetTodoNegativeIdValidationFailure() {
+        // act
+        mockMvc.perform(get("/api/todos/-1"))
+                // assert
+                .andExpect(status().is4xxClientError());
     }
 
     @Test
-    void testInvalidCreateTodo() throws Exception {
+    @SneakyThrows
+    void testCreateTodoBlankTitleValidationFailure() {
+        // arrange
         CreateTodoRequest request = new CreateTodoRequest();
         request.setTitle("");
         request.setDescription("dummy");
@@ -63,29 +73,13 @@ class TodoControllerMvcTests {
 
         when(todoService.createTodo(request)).thenReturn(todo);
 
+        // act
         mockMvc.perform(post("/api/todos")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(request)))
+                // assert
                 .andExpect(status().isBadRequest());
-                //.andExpect(jsonPath("$.id").value(1L));
-    }
-
-    @Test
-    void testUpdateTodo() throws Exception {
-        CreateTodoRequest request = new CreateTodoRequest();
-        request.setTitle("Updated Title");
-
-        TodoEntity todo = new TodoEntity();
-        todo.setId(1L);
-        todo.setTitle("Updated Title");
-
-        when(todoService.updateTodo(eq(1L), any(UpdateTodoRequest.class))).thenReturn(todo);
-
-        mockMvc.perform(put("/api/todos/1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"title\":\"Updated Title\"}"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.title").value("Updated Title"));
+        //.andExpect(jsonPath("$.id").value(1L));
     }
 
     @Test

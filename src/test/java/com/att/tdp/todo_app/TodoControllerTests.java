@@ -110,7 +110,7 @@ class TodoControllerTests {
     }
 
     @Test
-    void testDeleteTodo() throws Exception {
+    void testDeleteTodoSuccess() throws Exception {
         // arrange
         TodoEntity savedTodo = todoRepository.save(TodoTestHelper.createTodoEntity("delete this todo", "just delete it"));
 

@@ -5,6 +5,7 @@ import com.att.tdp.todo_app.dto.TodoEntity;
 import com.att.tdp.todo_app.dto.CreateTodoRequest;
 import com.att.tdp.todo_app.dto.UpdateTodoRequest;
 import com.att.tdp.todo_app.exceptions.RestExceptionHandler;
+import com.att.tdp.todo_app.exceptions.TodoNotFoundException;
 import com.att.tdp.todo_app.services.TodoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
@@ -83,8 +84,12 @@ class TodoControllerMvcTests {
     }
 
     @Test
-    void testDeleteTodo() throws Exception {
-        mockMvc.perform(delete("/api/todos/1"))
-                .andExpect(status().isNoContent());
+    void testGetTodoNotFoundFailure() throws Exception {
+        // arrange
+        when(todoService.getTodo(1L)).thenThrow(new TodoNotFoundException("Todo not found"));
+        // act
+        mockMvc.perform(get("/api/todos/1"))
+                // assert
+                .andExpect(status().isNotFound());
     }
 }

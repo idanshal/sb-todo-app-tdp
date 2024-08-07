@@ -388,13 +388,13 @@ spring:
 - Add `@RequestMapping` to the controller class with the path "/api/todos"
 - Add the following endpoints:
 
-| Method Name | Http Verb | Endpoint        | Returns                              |
-|-------------|-----------|-----------------|--------------------------------------|
-| getTodos    | GET       | /api/todos      | ResponseEntity\<List\<TodoEntity\>\> |
-| getTodo     | GET       | /api/todos/{id} | ResponseEntity\<TodoEntity\>         |
-| createTodo  | POST      | /api/todos      | ResponseEntity\<TodoEntity\>         |
-| updateTodo  | PUT       | /api/todos/{id} | ResponseEntity\<TodoEntity\>         |
-| deleteTodo  | DELETE    | /api/todos/{id} | ResponseEntity\<Void\>               |
+| Method Name | Http Verb | Endpoint        | Returns                              | Expected Status     |
+|-------------|-----------|-----------------|--------------------------------------|---------------------|
+| getTodos    | GET       | /api/todos      | ResponseEntity\<List\<TodoEntity\>\> | 200OK               |
+| getTodo     | GET       | /api/todos/{id} | ResponseEntity\<TodoEntity\>         | 200OK, 404NOT_FOUND |
+| createTodo  | POST      | /api/todos      | ResponseEntity\<TodoEntity\>         | 201CREATED          |
+| updateTodo  | PUT       | /api/todos/{id} | ResponseEntity\<TodoEntity\>         | 200OK, 404NOT_FOUND |
+| deleteTodo  | DELETE    | /api/todos/{id} | ResponseEntity\<Void\>               | 204NO_CONTENT       |
 
 - At this phase, we return a TodoEntity from the service layer if exists, null otherwise. 
 If a todo doesn't exist, we return 404.

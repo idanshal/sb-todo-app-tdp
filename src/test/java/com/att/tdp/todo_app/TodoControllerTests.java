@@ -25,8 +25,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class TodoControllerTests {
 
     //TODO!!!
-    // fix deleteTodo in all branches
-    // change behavior of delete to actually delete AND silently ignore errors and add that do readme
     // add tests for validation, error handling, empty list
     // check assertj core api for more assertions
     // add assertions for db besides API
@@ -38,8 +36,7 @@ class TodoControllerTests {
     @Autowired
     private TodoRepository todoRepository;
 
-    @BeforeEach
-        // used to run a method before each test method in the class.
+    @BeforeEach // used to run a method before each test method in the class.
     void setup() {
         todoRepository.deleteAll();
     }

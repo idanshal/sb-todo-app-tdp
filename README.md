@@ -81,7 +81,6 @@ MyComponent comp = ctx.getBean(MyComponent.class);
 - `@Bean` is a method-level annotation, it is used to explicitly declare a single bean.
   You can use it, for example, to wire components from 3rd-party libraries (you don't have the source code so you can't annotate its classes with `@Component`), so automatic configuration is not possible.
 
-
 ## DI in _Spring_
 
 ### Constructor Injection
@@ -257,6 +256,19 @@ public class AnotherComponent {
 }
 ```
 
+## Bean Scanning and Registration
+
+- Spring can automatically scan and register in the application context all your beans,
+  such as configurations, controllers, services, and other components you define.
+- Spring can also automatically create and register beans from the jars that are added to your application.
+
+### Bean Scanning and Registration – HOW ?
+
+- Use the annotation `@ComponentScan` to automatically scan and register for all beans, defined under the current package and all sub-packages.
+- Use the annotation `@EnableAutoConfiguration` to automatically create and register beans also from the jars that are added to your application.
+- But even better – use the annotation `@SpringBootApplication`, which enables `@ComponentScan`, `@EnableAutoConfiguration`, and `@Configuration` annotations.
+- Usually, these annotations are placed with the main application class (that’s why it is generally recommended to locate it in a root package above other classes).
+
 # Spring Boot based Todo app for TDP
 
 ## 0.0 - Pre-requisites
@@ -280,6 +292,13 @@ public class AnotherComponent {
   - Spring Data JPA
   - H2 Database
 - Fill in the project metadata and generate
+
+### Spring Boot Starters
+- Spring Boot starters are built-in Spring dependency descriptors that make development easier and rapid.
+- Spring Boot provides around 50+ starters, for various tasks and technologies. The official starters follow a naming convention spring-boot-starter-*, where * denotes application type.
+- When starting the application, the starter will load all the relevant JARs (for example, if you entered to the pom.xml dependency to spring-boot-starter-web, Spring would load all jar required for creating RESTful service).
+
+
 
 ![spring initializr](course_data/images/spring_initializr_screenshot.png)
 

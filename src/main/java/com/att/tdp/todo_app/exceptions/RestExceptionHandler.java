@@ -2,6 +2,7 @@ package com.att.tdp.todo_app.exceptions;
 
 import com.att.tdp.todo_app.dto.ErrorDto;
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import static java.util.stream.Collectors.joining;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 @RestControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
@@ -47,6 +49,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseStatus(BAD_REQUEST)
     public ErrorDto handleConstraintViolationException(ConstraintViolationException ex) {
         return new ErrorDto("102",ex.getMessage());
+    }
+
+    @ExceptionHandler(DataAccessException.class)
+    @ResponseStatus(INTERNAL_SERVER_ERROR)
+    public ErrorDto handleDataAccessException(DataAccessException ex) {
+        return new ErrorDto("103",ex.getMessage());
     }
 
     private String buildMessage(MethodArgumentNotValidException ex) {

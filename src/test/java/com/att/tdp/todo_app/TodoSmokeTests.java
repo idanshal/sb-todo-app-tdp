@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-class TodoAppApplicationTests {
+class TodoSmokeTests {
 
 	@Autowired
 	TodoController todoController;

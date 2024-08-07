@@ -23,12 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest // used for loading the full application context for integration tests.
 @AutoConfigureMockMvc // used for configuring MockMvc for testing web layer components in a Spring Boot application
-class TodoControllerTests {
-
-    //TODO!!!
-    // add tests for validation, error handling, empty list
-    // check assertj core api for more assertions
-    // add assertions for db besides API
+class TodoControllerHappyTests {
     // add DataJPATest (+add to readme)
 
     @Autowired
@@ -58,6 +53,15 @@ class TodoControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[*].title", containsInAnyOrder("Do laundry", "Do dishes")));
+    }
+
+    @Test
+    void testEmptyTodosSuccess() throws Exception {
+        // act
+        mockMvc.perform(get("/api/todos"))
+                // assert
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isEmpty());
     }
 
 

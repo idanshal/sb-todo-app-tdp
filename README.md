@@ -1,21 +1,21 @@
 # Practical Spring Boot for TDP
 
-## Inversion of Control (IoC) and Dependency Injection (DI) in Spring
+## Spring Terminology
 
-- The core of the Spring framework is the IoC (Inversion of Control) Container.
-It creates the objects, configures and assembles their dependencies, and manages their entire life cycle.
+### Container
+
+- The core of the Spring framework is the IoC (Inversion of Control) **Container**.
+It creates the objects (**Beans**), configures and assembles their dependencies, and manages their entire life cycle.
 - The Container uses Dependency Injection(DI) to manage the components that make up the application.
 It gets information about the objects from the Java Code and Annotations.
 
-## Spring Terminology
+### Bean
+The managed object (instance) by Spring.
+- Spring manages bean creation\destruction
+- Spring manages bean dependencies (by injection)
+- Spring manages bean scope (singleton or prototype)
 
-- **Bean** – the managed object (instance) by Spring.
-  - Spring manages bean creation\destruction
-  - Spring manages bean dependencies (by injection)
-  - Spring manages bean scope (singleton or prototype)
-- **Container** – the core of _Spring_. It creates the objects (Beans), configures and assembles their dependencies, manages their entire life cycle.
-
-## ApplicationContext
+### ApplicationContext
 
 ApplicationContext is the _Spring_ interface representing the IoC container. ApplicationContext holds all beans and manages them.
 To obtain a bean from ApplicationContext, use the getBean() function and specify bean ID or interface\class. In case of no ambiguity – _Spring_ will automatically know which bean to extract for you.
@@ -30,12 +30,13 @@ MyBean bean2 = ctx.getBean("MyBean");
 
 ![SpringIoC](course_data/images/spring_ioc.png)
 
-## Spring Beans configuration
+## Spring Beans Configuration: @Bean and @Component
 
-- An application should provide the bean configuration to the ApplicationContext container. A Spring bean configuration consists of one or more beans definitions.
-- _Spring_ supports different ways of configuring beans
-  - `@Bean`-annotated methods within a `@Configuration` class
-  - `@Component`-annotated classes
+An application should provide the bean configuration to the ApplicationContext container. <br/>
+A Spring bean configuration consists of one or more beans definitions. <br/>
+_Spring_ supports different ways of configuring beans:
+- `@Bean`-annotated methods within a `@Configuration` class
+- `@Component`-annotated classes
 
 ### `@Bean`-annotated methods within a `@Configuration` class
 

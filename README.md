@@ -4,9 +4,9 @@
 
 ### Container
 
-- The core of the Spring framework is the IoC (Inversion of Control) **Container**.
+- The core of the Spring framework is the IoC (Inversion of Control) **Container**. <br/>
 It creates the objects (**Beans**), configures and assembles their dependencies, and manages their entire life cycle.
-- The Container uses Dependency Injection(DI) to manage the components that make up the application.
+- The Container uses Dependency Injection(DI) to manage the components that make up the application. <br/>
 It gets information about the objects from the Java Code and Annotations.
 
 ### Bean
@@ -28,7 +28,7 @@ MyBean bean1 = ctx.getBean(MyBean.class);
 MyBean bean2 = ctx.getBean("MyBean");
 ```
 
-![SpringIoC](course_data/images/spring_ioc.png)
+![spring_ioc_container.png](course_data/images/spring_ioc_container.png)
 
 ## Spring Beans Configuration: @Bean and @Component
 
@@ -181,7 +181,8 @@ public class Component {
 @Component
 public class AnotherComponent {
 	private Component comp;
-	 AnotherComponent(Component comp) {
+	
+    public AnotherComponent(Component comp) {
 		this.comp = comp;
 	}
 }

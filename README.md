@@ -1,6 +1,11 @@
 # Practical Spring Boot for TDP
 
+![DURATION](https://img.shields.io/badge/DURATION-7h-F39C12?logo=clockify&logoColor=white)
+
+
 ## Spring Terminology
+
+![LEARNING TIME](https://img.shields.io/badge/LEARNING%20TIME-00ADEF?logo=read-the-docs&logoColor=white)
 
 ### Container
 
@@ -273,7 +278,7 @@ public class AnotherComponent {
 
 # Spring Boot based Todo app for TDP
 
-## 0.0 - Pre-requisites
+## Pre-requisites
 
 - A working internet connection
   - Proxy settings configured on your machine
@@ -285,7 +290,8 @@ public class AnotherComponent {
 - Postman
 - Git
 
-![DURATION](https://img.shields.io/badge/DURATION-7h-F39C12?logo=clockify&logoColor=white)
+<br>![HANDS-ON TIME](https://img.shields.io/badge/HANDS--ON%20TIME-F39C12?logo=read-the-docs&logoColor=white)<br>
+
 ## Generate a _Spring Boot_ Project using _spring initializr_
 
 - Go to https://start.spring.io/
@@ -299,8 +305,6 @@ public class AnotherComponent {
 - Spring Boot starters are built-in Spring dependency descriptors that make development easier and rapid.
 - Spring Boot provides around 50+ starters, for various tasks and technologies. The official starters follow a naming convention spring-boot-starter-*, where * denotes application type.
 - When starting the application, the starter will load all the relevant JARs (for example, if you entered to the pom.xml dependency to spring-boot-starter-web, Spring would load all jar required for creating RESTful service).
-
-
 
 ![spring initializr](course_data/images/spring_initializr_screenshot.png)
 

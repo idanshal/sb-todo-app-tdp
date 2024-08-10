@@ -383,10 +383,11 @@ spring:
   - add some temporary code to the controller to call the service
  ```java
 // Add to TodoController:
-  @GetMapping("/hello")
-    public String hello(@RequestParam String name) {
-        return todoService.sayHello(name);
-    }
+@GetMapping("/hello")
+public ResponseEntity<String> hello(@RequestParam String name) {
+    String result = todoService.sayHello(name);
+    return ResponseEntity.ok(result);
+}
 // Add to TodoService:     
   public String sayHello(String name) {
       return "Hello " + name;

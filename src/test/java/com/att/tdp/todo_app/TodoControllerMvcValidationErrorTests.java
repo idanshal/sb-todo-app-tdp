@@ -1,7 +1,6 @@
 package com.att.tdp.todo_app;
 
 import com.att.tdp.todo_app.controllers.TodoController;
-import com.att.tdp.todo_app.dal.TodoRepository;
 import com.att.tdp.todo_app.dto.TodoEntity;
 import com.att.tdp.todo_app.dto.CreateTodoRequest;
 import com.att.tdp.todo_app.exceptions.TodoNotFoundException;
@@ -12,17 +11,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.dao.DataAccessException;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(TodoController.class) // used to focus only on the TodoController and not load the full application context.
@@ -33,6 +26,8 @@ class TodoControllerMvcValidationErrorTests {
 
     @MockBean // @MockBean is used to create and inject a mock instance of TodoService into the TodoController.
     private TodoService todoService;
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     @SneakyThrows
@@ -51,17 +46,10 @@ class TodoControllerMvcValidationErrorTests {
         request.setTitle("");
         request.setDescription("dummy");
 
-        TodoEntity todo = new TodoEntity();
-        todo.setId(1L);
-        todo.setTitle("Test");
-        todo.setDescription("Test Description");
-
-        when(todoService.createTodo(request)).thenReturn(todo);
-
         // act
         mockMvc.perform(post("/api/todos")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(request)))
+                        .content(objectMapper.writeValueAsString(request)))
                 // assert
                 .andExpect(status().isBadRequest());
     }

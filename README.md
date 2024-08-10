@@ -562,8 +562,6 @@ If a validation of request body fails, a MethodArgumentNotValidException will be
 By default, Spring will translate this exception to a HTTP status 400 (Bad Request).
 We can customize the response by adding a custom exception handler.
 
-![HANDS-ON TIME](https://img.shields.io/badge/HANDS--ON%20TIME-F39C12?logo=read-the-docs&logoColor=white)<br>
-
 - Add a custom exception handler for MethodArgumentNotValidException in the @RestControllerAdvice class like so:
 
 ```java
@@ -595,6 +593,33 @@ If a validation of path variables or request parameters fails, a ConstraintViola
 By default, Spring will translate it to a Http status 500 (Internal Server Error).
 If we want to return a HTTP status 400 instead (which makes sense, since the client provided an invalid parameter, making it a bad request), 
 we can add a custom exception handler.
+
+- Add an exception handler for ConstraintViolationException:
+
+```java
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(BAD_REQUEST)
+    public ErrorDto handleConstraintViolationException(ConstraintViolationException ex) {
+        return new ErrorDto("102",ex.getMessage());
+    }
+
+```
+
+- Let's add two more exception handlers - one for DataAccessException (a DB exception) and one for a general exception:
+
+```java
+    @ExceptionHandler(DataAccessException.class)
+    @ResponseStatus(INTERNAL_SERVER_ERROR)
+    public ErrorDto handleDataAccessException(DataAccessException ex) {
+        return new ErrorDto("103",ex.getMessage());
+    }
+
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(INTERNAL_SERVER_ERROR)
+    public ErrorDto handleGeneralException(Exception ex) {
+        return new ErrorDto("105",ex.getMessage());
+    }
+```
 
 ## Configuration (git branch: 06-configuration)
 

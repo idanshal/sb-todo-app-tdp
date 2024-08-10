@@ -57,6 +57,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ErrorDto("103",ex.getMessage());
     }
 
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(INTERNAL_SERVER_ERROR)
+    public ErrorDto handleGeneralException(Exception ex) {
+        return new ErrorDto("105",ex.getMessage());
+    }
+
     private String buildMessage(MethodArgumentNotValidException ex) {
         BindingResult bindingResult = ex.getBindingResult();
         return bindingResult.getFieldErrors()

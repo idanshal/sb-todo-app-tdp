@@ -379,6 +379,20 @@ spring:
   - create TodoController
 - create a services package
   - create TodoService 
+- TEMP - will be deleted after this section
+  - add some temporary code to the controller to call the service
+ ```java
+// Add to TodoController:
+  @GetMapping("/hello")
+    public String hello(@RequestParam String name) {
+        return todoService.sayHello(name);
+    }
+// Add to TodoService:     
+  public String sayHello(String name) {
+      return "Hello " + name;
+  }
+
+```
 - Instruct Spring to manage instances of both classes
 - Instruct Spring to inject TodoService into TodoController (field injection)
 - Remove `@Autowired` from class member dependency

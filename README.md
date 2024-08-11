@@ -392,7 +392,7 @@ public ResponseEntity<String> hello(@RequestParam String name) {
   }
 
 ```
-- Instruct Spring to manage instances of both classes
+- Instruct Spring to manage instances of both TodoService and TodoController
 - Instruct Spring to inject TodoService into TodoController (field injection)
 - Remove `@Autowired` from class member dependency
   - Observe dependency is null

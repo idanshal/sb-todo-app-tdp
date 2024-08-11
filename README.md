@@ -3,7 +3,7 @@
 ![DURATION](https://img.shields.io/badge/DURATION-7h-F39C12?logo=clockify&logoColor=white)
 
 
-## Spring Terminology
+## Dependency Injection in Spring
 
 ![LEARNING TIME](https://img.shields.io/badge/LEARNING%20TIME-00ADEF?logo=read-the-docs&logoColor=white)
 
@@ -35,7 +35,7 @@ MyBean bean2 = ctx.getBean("MyBean");
 
 ![spring_ioc_container.png](course_data/images/spring_ioc_container.png)
 
-## Spring Beans Configuration: @Bean and @Component
+### Spring Beans Configuration: @Bean and @Component
 
 An application should provide the bean configuration to the ApplicationContext container. <br/>
 A Spring bean configuration consists of one or more beans definitions. <br/>
@@ -43,7 +43,7 @@ _Spring_ supports different ways of configuring beans:
 - `@Bean`-annotated methods within a `@Configuration` class
 - `@Component`-annotated classes
 
-### `@Bean`-annotated methods within a `@Configuration` class
+#### `@Bean`-annotated methods within a `@Configuration` class
 
 - A class annotated with `@Configuration` indicates that it contains Spring Bean configurations.
 - The `@Bean` annotation on a method indicates that the method creates a Spring Bean.
@@ -64,7 +64,7 @@ public class ComponentsConfig {
 ApplicationContext ctx = new AnnotationConfigApplicationContext(ComponentsConfig.class);
 MyComponent comp = ctx.getBean(MyComponent.class);
 ```
-### `@Component`-annotated classes
+#### `@Component`-annotated classes
 
 - Mark a class by one from the Spring annotations: `@Component`, `@Controller`, `@Service`, and `@Repository`.
   - `@Controller`, `@Service` and `@Repository` are special types of `@Component` annotation.
@@ -80,14 +80,14 @@ ApplicationContext ctx = new AnnotationConfigApplicationContext("com.att.course.
 MyComponent comp = ctx.getBean(MyComponent.class);
 ```
 
-### `@Bean` vs `@Component`
+#### `@Bean` vs `@Component`
 
 - `@Component` is a class-level annotation used to auto-detect and auto-configure beans using classpath scanning.
   There's an implicit one-to-one mapping between the annotated class and the bean (i.e., one bean per class).
 - `@Bean` is a method-level annotation, it is used to explicitly declare a single bean.
   You can use it, for example, to wire components from 3rd-party libraries (you don't have the source code so you can't annotate its classes with `@Component`), so automatic configuration is not possible.
 
-## DI in _Spring_
+### The different type of injections: Constructor, Field, Setter
 
 ### Constructor Injection
 ```java
@@ -141,8 +141,6 @@ public class Component2 {
 }
 ```
 
-### Ctor vs Field vs Setter Injection
-
 - Why prefer Constructor Injection:
   - An object must be created with the full and correct state.
   - The app can define for the object a mock dependency in a unit test.
@@ -193,11 +191,11 @@ public class AnotherComponent {
 }
 ```
 
-### Autowire Disambiguation
+#### Autowire Disambiguation
 If more than one bean of the same type is available in the container, the framework will throw a fatal exception.
 To resolve this conflict, we need to tell Spring explicitly which bean we want to inject.
 
-#### Autowiring by @Qualifier
+##### Autowiring by @Qualifier
 
 ```java
 public class MyComponent extends BaseComponent {
@@ -230,7 +228,7 @@ public class AnotherComponent {
 }
 ```
 
-#### Autowiring by Name
+##### Autowiring by Name
 
 ```java
 public class MyComponent extends BaseComponent {
@@ -263,22 +261,22 @@ public class AnotherComponent {
 }
 ```
 
-## Bean Scanning and Registration
+### Bean Scanning and Registration
 
 - Spring can automatically scan and register in the application context all your beans,
   such as configurations, controllers, services, and other components you define.
 - Spring can also automatically create and register beans from the jars that are added to your application.
 
-### Bean Scanning and Registration – HOW ?
+#### Bean Scanning and Registration – HOW ?
 
 - Use the annotation `@ComponentScan` to automatically scan and register for all beans, defined under the current package and all sub-packages.
 - Use the annotation `@EnableAutoConfiguration` to automatically create and register beans also from the jars that are added to your application.
 - But even better – use the annotation `@SpringBootApplication`, which enables `@ComponentScan`, `@EnableAutoConfiguration`, and `@Configuration` annotations.
 - Usually, these annotations are placed with the main application class (that’s why it is generally recommended to locate it in a root package above other classes).
 
-# Spring Boot based Todo app for TDP
+## Creating a Spring Boot Application from Scratch (Todo App)
 
-## Pre-requisites
+### Pre-requisites
 
 - A working internet connection
   - Proxy settings configured on your machine
@@ -292,7 +290,7 @@ public class AnotherComponent {
 
 <br>![HANDS-ON TIME](https://img.shields.io/badge/HANDS--ON%20TIME-F39C12?logo=read-the-docs&logoColor=white)<br>
 
-## Generate a _Spring Boot_ Project using _spring initializr_
+### Generate a _Spring Boot_ Project using _spring initializr_
 
 - Go to https://start.spring.io/
 - Add dependencies
@@ -308,7 +306,7 @@ public class AnotherComponent {
 
 ![spring initializr](course_data/images/spring_initializr_screenshot.png)
 
-## Project structure
+### Project structure
 - Open the project in _Intellij IDEA_
 - Review the project files structure
 - Review pom.xml
@@ -325,7 +323,7 @@ public class TodoAppApplication {
 }
 ```
 
-## Compile & Run
+### Compile & Run
 - Verify the application compiles and runs successfully
   - View logs in the console ![app start logs](course_data/images/app_start_logs.png)
     - Note that application server (Tomcat) starts on port 8080
@@ -335,11 +333,11 @@ server:
   port: 8081
 ```
 
-## Define TodoEntity
+### Define TodoEntity
 - Add dto package
   - Create TodoEntity (Long id, String title, String description, boolean isCompleted) - setters & getters
 
-## Create TodoRepository
+### Create TodoRepository
 
 - Create dal package
     - Create TodoRepository:
@@ -350,7 +348,7 @@ public interface TodoRepository extends JpaRepository<TodoEntity, Long> {
 }
 ```
 
-## Configure Database
+### Configure Database
 We will work with the _H2_ in-memory database for this project.
 - Add the following yaml section to application.yml 
 ```yaml

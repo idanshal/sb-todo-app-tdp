@@ -2,10 +2,8 @@ package com.att.tdp.todo_app.dto;
 
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 public class UpdateTodoRequest {
 
     @Size(min = 3, max = 100)

@@ -7,9 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@Builder
-@AllArgsConstructor
 public class UpdateTodoRequest {
     @Size(min = 3, max = 100)
     private String title;

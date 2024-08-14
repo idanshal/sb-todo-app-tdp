@@ -2,6 +2,7 @@ package com.att.tdp.todo_app;
 
 import com.att.tdp.todo_app.dal.TodoRepository;
 import com.att.tdp.todo_app.dto.TodoEntity;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,6 +26,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc // used for configuring MockMvc for testing web layer components in a Spring Boot application
 class TodoControllerHappyTests {
     // add DataJPATest (+add to readme)
+
+    @Autowired
+    ObjectMapper objectMapper;
 
     @Autowired
     private MockMvc mockMvc;
@@ -75,6 +79,25 @@ class TodoControllerHappyTests {
                 // assert
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(savedTodo.getId()));
+    }
+
+    @Test
+    @SneakyThrows
+    void testAdditionalGetTodoSuccess() {
+        // arrange
+        TodoEntity savedTodo = todoRepository.save(TodoTestHelper.createTodoEntity("Learn something new", "Read a book"));
+        // act
+        String response = mockMvc.perform(get("/api/todos/%d".formatted(savedTodo.getId())))
+                // assert
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        TodoEntity todoEntity = objectMapper.readValue(response, TodoEntity.class);
+        assertThat(todoEntity.getId()).isEqualTo(savedTodo.getId());
+        assertThat(todoEntity.getTitle()).isEqualTo(savedTodo.getTitle());
+        assertThat(todoEntity.getDescription()).isEqualTo(savedTodo.getDescription());
     }
 
     @Test

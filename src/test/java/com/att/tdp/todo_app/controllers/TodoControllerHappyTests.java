@@ -1,5 +1,6 @@
-package com.att.tdp.todo_app;
+package com.att.tdp.todo_app.controllers;
 
+import com.att.tdp.todo_app.helpers.TodoTestHelper;
 import com.att.tdp.todo_app.dal.TodoRepository;
 import com.att.tdp.todo_app.dto.TodoEntity;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,7 +26,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest // used for loading the full application context for integration tests.
 @AutoConfigureMockMvc // used for configuring MockMvc for testing web layer components in a Spring Boot application
 class TodoControllerHappyTests {
-    // add DataJPATest (+add to readme)
 
     @Autowired
     ObjectMapper objectMapper;

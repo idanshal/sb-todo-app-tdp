@@ -1,7 +1,5 @@
-package com.att.tdp.todo_app;
+package com.att.tdp.todo_app.controllers;
 
-import com.att.tdp.todo_app.controllers.TodoController;
-import com.att.tdp.todo_app.dto.TodoEntity;
 import com.att.tdp.todo_app.dto.CreateTodoRequest;
 import com.att.tdp.todo_app.exceptions.TodoNotFoundException;
 import com.att.tdp.todo_app.services.TodoService;
@@ -10,8 +8,8 @@ import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.Mockito.when;
@@ -24,7 +22,7 @@ class TodoControllerMvcValidationErrorTests {
     @Autowired
     private MockMvc mockMvc; // MockMvc is used to perform HTTP requests and verify responses.
 
-    @MockBean // @MockBean is used to create and inject a mock instance of TodoService into the TodoController.
+    @MockitoBean // @MockBean is used to create and inject a mock instance of TodoService into the TodoController.
     private TodoService todoService;
 
     private final ObjectMapper objectMapper = new ObjectMapper();

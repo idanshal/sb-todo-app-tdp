@@ -1,6 +1,6 @@
 # Practical Spring Boot for TDP
 
-![DURATION](https://img.shields.io/badge/DURATION-7h-F39C12?logo=clockify&logoColor=white)
+![DURATION](https://img.shields.io/badge/DURATION-8h-F39C12?logo=clockify&logoColor=white)
 
 
 ## Dependency Injection in Spring
@@ -40,8 +40,8 @@ MyBean bean2 = ctx.getBean("MyBean");
 An application should provide the bean configuration to the ApplicationContext container. <br/>
 A Spring bean configuration consists of one or more beans definitions. <br/>
 _Spring_ supports different ways of configuring beans:
-- `@Bean`-annotated methods within a `@Configuration` class
-- `@Component`-annotated classes
+- `@Bean` annotated methods within a `@Configuration` annotated class
+- `@Component` annotated classes
 
 #### `@Bean`-annotated methods within a `@Configuration` class
 
@@ -141,17 +141,15 @@ public class Component2 {
 }
 ```
 
-- Why prefer Constructor Injection:
-  - An object must be created with the full and correct state.
-  - The app can define for the object a mock dependency in a unit test.
-  - An object can be specified as immutable (for example, to gain thread safety).
-- Why prefer Field Injection:
-  - The more readable code; allows focusing on business logic.
-  - When some of the object’s properties could be optional.
-- Why prefer Setter Injection:
-  - When you need some “smart setter”, for example, for additional validation.
+| Injection Type   | When to Use                     | Pros                            | Cons                           |
+|------------------|--------------------------------|--------------------------------|--------------------------------|
+| **Constructor**  | Preferred for mandatory dependencies | Immutable, clear, testable       | Slightly more boilerplate       |
+| **Field**        | Quick prototyping, simple cases | Less boilerplate                 | Hard to test, hidden dependencies |
+| **Setter**       | Optional or changeable dependencies | Flexible, solves circular dependencies | Mutable, dependencies not enforced |
 
-Note: Constructor Injection is the most straightforward and recommended way of dependency injection!
+Best practice:
+**Constructor injection** is highly recommended for most cases due to clarity, immutability, and better testability. Use setter injection only when you need optional dependencies or to resolve circular dependencies. Avoid field injection for production code.
+
 
 ### `@Autowired`
 
@@ -198,7 +196,7 @@ To resolve this conflict, we need to tell Spring explicitly which bean we want t
 ##### Autowiring by @Qualifier
 
 ```java
-public class MyComponent extends BaseComponent {
+public class Component extends BaseComponent {
   // some code
 }
 
@@ -336,6 +334,7 @@ server:
 ### Define TodoEntity
 - Add dto package
   - Create TodoEntity (Long id, String title, String description, boolean isCompleted) - setters & getters
+  - Annotate TodoEntity with `@Entity`
 
 ### Create TodoRepository
 
@@ -445,6 +444,14 @@ If a todo doesn't exist, we return 404.
 - First let's refactor our service layer to throw exceptions in case a todo is not found.
   - For that purpose, create an exceptions package and a custom exception class `TodoNotFoundException`
 
+```java
+public class TodoNotFoundException extends RuntimeException {
+    public TodoNotFoundException(String message) {
+        super(message);
+    }
+}
+```
+
 ![LEARNING TIME](https://img.shields.io/badge/LEARNING%20TIME-00ADEF?logo=read-the-docs&logoColor=white)
 
 ### `@ExceptionHandler`
@@ -524,13 +531,7 @@ Spring Boot’s Bean Validation support comes with the validation starter:
 
 Very basically, Bean Validation works by defining constraints to the fields of a class by annotating them with 
 certain annotations, for example:
-@NotNull
-@Size
-@Min and @Max
-@NotEmpty, @NotBlank
-@Pattern
-@Positive, @PositiveOrZero, @Negative, @NegativeOrZero
-Etc.
+`@NotNull`, `@Size`, `@Min`, `@Max`, `@NotEmpty`, `@NotBlank`, `@Pattern`, `@Positive`, `@PositiveOrZero`, `@Negative`, `@NegativeOrZero`, etc.
 
 ### @Validated and @Valid
 
@@ -546,11 +547,14 @@ There are three things we can validate for any incoming HTTP request: Request bo
 
 ![HANDS-ON TIME](https://img.shields.io/badge/HANDS--ON%20TIME-F39C12?logo=read-the-docs&logoColor=white)<br>
 
-- Add the spring-boot-starter-validation dependency to the pom.xml
-- Add validation annotations to the TodoRequest class
+- Add _spring-boot-starter-validation_ dependency to pom.xml
+- Add validation annotations to the CreateTodoRequest class
   - title should not be null or empty and also should have a min length of 3 and a max length of 100
   - description should not be null or empty and also should have a max length of 300
-- Add validation for the POST/PUT requests so that the TodoRequest is validated
+- Add validation annotations to the UpdateTodoRequest class
+  - title should have a min length of 3 and a max length of 100
+  - description should have a max length of 300
+- Add validation for the POST/PUT requests so that both `CreateTodoRequest` and `UpdateTodoRequest` are validated
 - Add validation for the id path variable so that it is a positive number
 - Test endpoints using Postman and verify that validation works as expected
 

@@ -145,11 +145,11 @@ Best practice:
 
 ### `@Autowired`
 
-- Spring `@Autowired` annotation is used for automatic dependency injection. Using the annotation, we instruct Spring to inject the bean “auto-magically”.
+- The Spring `@Autowired` annotation is used for automatic dependency injection. By using this annotation, we instruct Spring to inject the bean “auto-magically”.
 The process of Spring bean injection is called autowiring.
-- `@Autowired` is generally used for field and setter injection. It can also be used with a constructor, to denote to Spring that this is the constructor to use for bean creation. But classes with a single constructor can omit the `@Autowired` annotation.
-- `@Autowired` on fields happens AFTER calling the constructor.
-- `@Autowired` is by default required and will fail in the case cannot be fulfilled. Change it by adding `@Autowired(required = false)`
+- `@Autowired` is generally used for field and setter injection. It can also be applied to a constructor to indicate to Spring which constructor to use for bean creation. However, classes with a single constructor can omit the `@Autowired` annotation.
+- Field injection using `@Autowired` occurs after the constructor is called.
+- By default, `@Autowired` is required and will cause a failure in case the dependency cannot be fulfilled. You can change this behavior by adding `@Autowired(required = false)`
 
 By default, Spring resolves @Autowired entries by type.
 
@@ -253,16 +253,16 @@ public class AnotherComponent {
 
 ### Bean Scanning and Registration
 
-- Spring can automatically scan and register in the application context all your beans,
+- _Spring_ can automatically scan and register all your beans in the application context,
   such as configurations, controllers, services, and other components you define.
-- Spring can also automatically create and register beans from the jars that are added to your application.
+- _Spring_ can also automatically create and register beans from the JARs added to your application.
 
 #### Bean Scanning and Registration – HOW ?
 
-- Use the annotation `@ComponentScan` to automatically scan and register for all beans, defined under the current package and all sub-packages.
-- Use the annotation `@EnableAutoConfiguration` to automatically create and register beans also from the jars that are added to your application.
-- But even better – use the annotation `@SpringBootApplication`, which enables `@ComponentScan`, `@EnableAutoConfiguration`, and `@Configuration` annotations.
-- Usually, these annotations are placed with the main application class (that’s why it is generally recommended to locate it in a root package above other classes).
+- Use the `@ComponentScan` annotation to automatically scan and register all beans defined in the current package and its sub-packages.
+- Use `@EnableAutoConfiguration` annotation to automatically create and register beans from the JARs added to your application.
+- Even better, use the `@SpringBootApplication` annotation, which combines `@ComponentScan`, `@EnableAutoConfiguration`, and `@Configuration`.
+- These annotations are usually placed on the main application class, which is why it is generally recommended to locate that class in a root package above other classes.
 
 ## Creating a Spring Boot Application from Scratch (Todo App)
 
@@ -290,9 +290,9 @@ public class AnotherComponent {
 - Fill in the project metadata and generate
 
 ### Spring Boot Starters
-- Spring Boot starters are built-in Spring dependency descriptors that make development easier and rapid.
-- Spring Boot provides around 50+ starters, for various tasks and technologies. The official starters follow a naming convention spring-boot-starter-*, where * denotes application type.
-- When starting the application, the starter will load all the relevant JARs (for example, if you entered to the pom.xml dependency to spring-boot-starter-web, Spring would load all jar required for creating RESTful service).
+- Spring Boot starters are built-in Spring dependency descriptors that make development easier and faster.
+- Spring Boot provides over 50 starters for various tasks and technologies. The official starters follow the naming convention `spring-boot-starter-*`, where * denotes the application type.
+- When starting the application, the starter loads all the relevant JARs. For example, if you add `spring-boot-starter-web` dependency to your `pom.xml`, Spring will load all the JARs required to create a RESTful service.
 
 ![spring initializr](course_data/images/spring_initializr_screenshot.png)
 

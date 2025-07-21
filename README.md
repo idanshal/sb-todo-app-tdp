@@ -15,10 +15,7 @@ It creates the objects (**Beans**), configures and assembles their dependencies,
 It gets information about the objects from the Java Code and Annotations.
 
 ### Bean
-The managed object (instance) by Spring.
-- Spring manages bean creation\destruction
-- Spring manages bean dependencies (by injection)
-- Spring manages bean scope (singleton or prototype)
+An object that the _Spring_ container instantiates, assembles, and manages.
 
 ### ApplicationContext
 
@@ -26,11 +23,8 @@ ApplicationContext is the _Spring_ interface representing the IoC container. App
 To obtain a bean from ApplicationContext, use the getBean() function and specify bean ID or interface\class. In case of no ambiguity – _Spring_ will automatically know which bean to extract for you.
 
 ```java
-ApplicationContext ctx = new AnnotationConfigApplicationContext(
-				"com.att.course.spring.demo.components");
-
-MyBean bean1 = ctx.getBean(MyBean.class);
-MyBean bean2 = ctx.getBean("MyBean");
+MyBean bean1 = applicationContext.getBean(MyBean.class); // by type
+Object bean2 = applicationContext.getBean("myBean"); // by name
 ```
 
 ![spring_ioc_container.png](course_data/images/spring_ioc_container.png)
@@ -61,12 +55,11 @@ public class ComponentsConfig {
 	}
 }
 
-ApplicationContext ctx = new AnnotationConfigApplicationContext(ComponentsConfig.class);
-MyComponent comp = ctx.getBean(MyComponent.class);
+MyComponent comp = applicationContext.getBean(MyComponent.class);
 ```
 #### `@Component`-annotated classes
 
-- Mark a class by one from the Spring annotations: `@Component`, `@Controller`, `@Service`, and `@Repository`.
+- Annotate a class using one of the _Spring_ annotations: `@Component`, `@Controller`, `@Service`, and `@Repository`.
   - `@Controller`, `@Service` and `@Repository` are special types of `@Component` annotation.
 - Spring will automatically detect these classes as beans.
 
@@ -76,8 +69,7 @@ public class MyComponent {
 	// the component code
 }
 
-ApplicationContext ctx = new AnnotationConfigApplicationContext("com.att.course.spring.demo.components");
-MyComponent comp = ctx.getBean(MyComponent.class);
+MyComponent comp = applicationContext.getBean(MyComponent.class);
 ```
 
 #### `@Bean` vs `@Component`
@@ -310,8 +302,8 @@ public class AnotherComponent {
 - Review pom.xml
   - Inspect dependencies
 - Review `@SpringBootApplication`
-  - From SpringApplication.run, the application will create the application context, that contains all the required Beans. 
-  - In the case of using a Web starter, it will also create an instance of Tomcat web server.
+  - When `SpringApplication.run` is called, the application creates an application context that contains all the required Beans. 
+  - If a Web starter is used, it also initializes an embedded Tomcat web server instance.
 ```java
 @SpringBootApplication
 public class TodoAppApplication {
@@ -325,6 +317,7 @@ public class TodoAppApplication {
 - Verify the application compiles and runs successfully
   - View logs in the console ![app start logs](course_data/images/app_start_logs.png)
     - Note that application server (Tomcat) starts on port 8080
+- Rename application.properties to application.yml & clear the file contents.
 - Review application.yml and set the port to 8081. Restart the application and verify it starts on port 8081
 ```yaml
 server:

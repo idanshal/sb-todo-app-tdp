@@ -94,10 +94,15 @@ class TodoControllerHappyTests {
                 .getResponse()
                 .getContentAsString();
 
+        // assert
         TodoEntity todoEntity = objectMapper.readValue(response, TodoEntity.class);
         assertThat(todoEntity.getId()).isEqualTo(savedTodo.getId());
         assertThat(todoEntity.getTitle()).isEqualTo(savedTodo.getTitle());
         assertThat(todoEntity.getDescription()).isEqualTo(savedTodo.getDescription());
+
+        // OR assert
+        assertThat(response).isEqualTo("""
+                {"id":%d,"title":"Learn something new","description":"Read a book","completed":false}""".formatted(savedTodo.getId()));
     }
 
     @Test

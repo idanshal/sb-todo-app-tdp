@@ -38,7 +38,7 @@ public class TodoEntity {
         this.description = description;
     }
 
-    public boolean isCompleted() {
+    public boolean getCompleted() {
         return completed;
     }
 

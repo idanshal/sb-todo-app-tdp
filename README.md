@@ -41,8 +41,8 @@ server:
 
   
 ## Define models and entities
-- Create TodoRequest (String title, String description, Boolean isCompleted)
-- Create TodoEntity (Long id, String title, String description, Boolean isCompleted)
+- Create TodoRequest (String title, String description, Boolean completed)
+- Create TodoEntity (Long id, String title, String description, Boolean completed)
 
 ## Create TodoRepository
 ```java
@@ -117,7 +117,7 @@ spring:
 
 - At this phase, we return an Optional<TodoEntity> from the service layer. 
 If a todo doesn't exist, we return 404.
-- Finally, let's test the endpoints using Postman
+- Finally, let's test the endpoints using Bruno
 
 ## Adding error handling (git branch: 03-error-handling)
 
@@ -176,7 +176,7 @@ It includes the `@Controller` and `@ResponseBody` annotations, and as a result, 
   - `@Scheduled` for scheduled tasks
   - `@Transactional` for transaction management
   - Filters & Interceptors for request/response manipulation
-- Use ObjectMapper to serialize/deserialize objects to/from JSON
+- Use JsonMapper (Jackson 3) to serialize/deserialize objects to/from JSON
 - 
 
 

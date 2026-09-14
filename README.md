@@ -41,8 +41,8 @@ server:
 
   
 ## Define models and entities
-- Create TodoRequest (String title, String description, Boolean isCompleted)
-- Create TodoEntity (Long id, String title, String description, Boolean isCompleted)
+- Create TodoRequest (String title, String description, Boolean completed)
+- Create TodoEntity (Long id, String title, String description, Boolean completed)
 
 ## Create TodoRepository
 ```java
@@ -103,7 +103,7 @@ spring:
 | updateTodo  | PUT       | /api/todos/{id} | ResponseEntity\<TodoEntity\>         |
 | deleteTodo  | DELETE    | /api/todos/{id} | ResponseEntity\<Void\>               |
 
-- Finally, let's test the endpoints using Postman
+- Finally, let's test the endpoints using Bruno
  
 ## General guidelines
 - Use DTOs to transfer data between layers (SoC)
@@ -116,7 +116,7 @@ spring:
   - @Scheduled for scheduled tasks
   - @Transactional for transaction management
   - Filters & Interceptors for request/response manipulation
-- Use ObjectMapper to serialize/deserialize objects to/from JSON
+- Use JsonMapper (Jackson 3) to serialize/deserialize objects to/from JSON
 - 
 
 

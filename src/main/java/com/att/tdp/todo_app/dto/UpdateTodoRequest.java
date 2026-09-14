@@ -3,7 +3,7 @@ package com.att.tdp.todo_app.dto;
 public class UpdateTodoRequest {
     private String title;
     private String description;
-    private Boolean isCompleted;
+    private Boolean completed;
 
     public String getTitle() {
         return title;
@@ -21,11 +21,11 @@ public class UpdateTodoRequest {
         this.description = description;
     }
 
-    public Boolean getIsCompleted() {
-        return isCompleted;
+    public Boolean getCompleted() {
+        return completed;
     }
 
-    public void setIsCompleted(Boolean isCompleted) {
-        this.isCompleted = isCompleted;
+    public void setCompleted(Boolean completed) {
+        this.completed = completed;
     }
 }

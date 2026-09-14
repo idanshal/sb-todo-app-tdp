@@ -3,14 +3,14 @@ package com.att.tdp.todo_app.controllers;
 import com.att.tdp.todo_app.dto.CreateTodoRequest;
 import com.att.tdp.todo_app.exceptions.TodoNotFoundException;
 import com.att.tdp.todo_app.services.TodoService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import tools.jackson.databind.json.JsonMapper;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -25,7 +25,7 @@ class TodoControllerMvcValidationErrorTests {
     @MockitoBean // @MockBean is used to create and inject a mock instance of TodoService into the TodoController.
     private TodoService todoService;
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final JsonMapper jsonMapper = JsonMapper.builder().build();
 
     @Test
     @SneakyThrows
@@ -47,7 +47,7 @@ class TodoControllerMvcValidationErrorTests {
         // act
         mockMvc.perform(post("/api/todos")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
+                        .content(jsonMapper.writeValueAsString(request)))
                 // assert
                 .andExpect(status().isBadRequest());
     }

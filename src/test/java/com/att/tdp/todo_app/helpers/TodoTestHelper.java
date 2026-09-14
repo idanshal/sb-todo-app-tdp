@@ -12,7 +12,7 @@ public class TodoTestHelper {
         return TodoEntity.builder()
                 .title(title)
                 .description(description)
-                .isCompleted(false)
+                .completed(false)
                 .build();
     }
 }

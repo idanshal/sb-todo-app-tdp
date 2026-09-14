@@ -1,6 +1,6 @@
 # Practical Spring Boot for TDP
 
-![DURATION](https://img.shields.io/badge/DURATION-7h-F39C12?logo=clockify&logoColor=white)
+![DURATION](https://img.shields.io/badge/DURATION-12h-F39C12?logo=clockify&logoColor=white)
 
 
 ## Dependency Injection in Spring
@@ -280,12 +280,12 @@ public class AnotherComponent {
 
 - A working internet connection
   - Proxy settings configured on your machine
-- Java 21 (check yourself: `java --version` should result with output)   
+- Java 25 (check yourself: `java --version` should result with output)   
 - Latest _Maven_ (check yourself: `mvn --version` should result with output)  
   - Configured with jFrog repository
 - Latest _Intellij IDEA_
   - Proxy settings configured in IDE
-- Postman
+- Bruno
 - Git
 
 <br>![HANDS-ON TIME](https://img.shields.io/badge/HANDS--ON%20TIME-F39C12?logo=read-the-docs&logoColor=white)<br>
@@ -302,7 +302,7 @@ public class AnotherComponent {
 ### Spring Boot Starters
 - Spring Boot starters are built-in Spring dependency descriptors that make development easier and rapid.
 - Spring Boot provides around 50+ starters, for various tasks and technologies. The official starters follow a naming convention spring-boot-starter-*, where * denotes application type.
-- When starting the application, the starter will load all the relevant JARs (for example, if you entered to the pom.xml dependency to spring-boot-starter-web, Spring would load all jar required for creating RESTful service).
+- When starting the application, the starter will load all the relevant JARs (for example, if you entered to the pom.xml dependency to spring-boot-starter-webmvc, Spring would load all jar required for creating RESTful service).
 
 ![spring initializr](course_data/images/spring_initializr_screenshot.png)
 
@@ -335,7 +335,7 @@ server:
 
 ### Define TodoEntity
 - Add dto package
-  - Create TodoEntity (Long id, String title, String description, boolean isCompleted) - setters & getters
+  - Create TodoEntity (Long id, String title, String description, boolean completed) - setters & getters
 
 ### Create TodoRepository
 
@@ -422,7 +422,7 @@ public ResponseEntity<String> hello(@RequestParam String name) {
 
 - Create request models
   - Create CreateTodoRequest (String title, String description) - setters & getters
-  - Create UpdateTodoRequest (String title, String description, Boolean isCompleted) - setters & getters 
+  - Create UpdateTodoRequest (String title, String description, Boolean completed) - setters & getters 
 - Add `@RequestMapping` to the controller class with the path "/api/todos"
 - Add the following endpoints:
 
@@ -436,7 +436,7 @@ public ResponseEntity<String> hello(@RequestParam String name) {
 
 - At this phase, we return a TodoEntity from the service layer if exists, null otherwise. 
 If a todo doesn't exist, we return 404.
-- Finally, let's test the endpoints using Postman
+- Finally, let's test the endpoints using Bruno
 
 ## Adding error handling (git branch: 03-error-handling)
 
@@ -552,7 +552,7 @@ There are three things we can validate for any incoming HTTP request: Request bo
   - description should not be null or empty and also should have a max length of 300
 - Add validation for the POST/PUT requests so that the TodoRequest is validated
 - Add validation for the id path variable so that it is a positive number
-- Test endpoints using Postman and verify that validation works as expected
+- Test endpoints using Bruno and verify that validation works as expected
 
 ### Customizing the error response for validation errors
 
@@ -585,7 +585,7 @@ We can customize the response by adding a custom exception handler.
         return "Field '%s.%s' %s".formatted(error.getObjectName(), error.getField(), error.getDefaultMessage());
     }
 ```
-- Test endpoints using Postman and verify that validation works as expected
+- Test endpoints using Bruno and verify that validation works as expected
 
 If a validation of path variables or request parameters fails, a ConstraintViolationException will be triggered. 
 By default, Spring will translate it to a Http status 500 (Internal Server Error).
@@ -676,7 +676,7 @@ todo-app:
 - Inject the server.port property into the MetaController (use @Value) and return it as a response for GET /api/meta/port
 - Inject the Environment object into the MetaController and return the JAVA_HOME environment variable as a response for GET /api/meta/java-home
 - Inject the PATH environment variable into the MetaController (use @Value) and return it as a response for GET /api/meta/path
-- Test the endpoints using Postman
+- Test the endpoints using Bruno
 
 ## Touch-ups (git branch - 07-touch-ups)
 
@@ -713,8 +713,23 @@ In pom.xml add:
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
+```
+- Also register Lombok as an explicit annotation processor in the `maven-compiler-plugin` configuration. Annotation processors on the compile classpath are only auto-discovered up to JDK 22; from JDK 23 onward (and with JDK 9+ if the project uses Java modules), the processor must be listed explicitly or it will not run:
+```xml
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+                <annotationProcessorPaths>
+                    <path>
+                        <groupId>org.projectlombok</groupId>
+                        <artifactId>lombok</artifactId>
+                    </path>
+                </annotationProcessorPaths>
+            </configuration>
+        </plugin>
 ```
 
 - IDE: enable annotation processing
@@ -729,8 +744,7 @@ to use the DB_USERNAME and DB_PASSWORD environment variables respectively
 
 ![LEARNING TIME](https://img.shields.io/badge/LEARNING%20TIME-00ADEF?logo=read-the-docs&logoColor=white)
 
-_Spring Boot_ provides several utilities and annotations to help when testing your application.
-Most developers use the spring-boot-starter-test “Starter”, which imports (in the test scope):
+_Spring Boot_ provides both a general-purpose spring-boot-starter-test starter and focused per-technology test starters. This project uses spring-boot-starter-webmvc-test for MVC/controller tests and spring-boot-starter-data-jpa-test for JPA tests, which import (in the test scope):
 - _Spring Test_ & _Spring Boot Test_ - utilities and integration test support for Spring Boot applications.
 - _Junit_ - the de-facto standard for unit testing Java applications.
 - _AssertJ_ - a fluent assertion library.
@@ -781,10 +795,10 @@ If you want to focus only on the web layer and not start a complete ApplicationC
 So, if your controller has some dependency to other beans from your service layer, 
 the test won't start until you either load that config yourself or provide a mock for it.
 
-### @MockBean
+### @MockitoBean
 
-Use `@MockBean` annotation to mock a bean object.
-Often, `@WebMvcTest` is limited to a single controller and is used in combination with `@MockBean` 
+`@MockBean`/`@SpyBean` were removed in Spring Boot 4; use `@MockitoBean` annotation to mock a bean object instead.
+Often, `@WebMvcTest` is limited to a single controller and is used in combination with `@MockitoBean` 
 to provide mock implementations for required dependencies.
 
 
@@ -887,4 +901,4 @@ anotherBean.getLazyBean();
   - `@Scheduled` for scheduled tasks
   - `@Transactional` for transaction management
   - Filters & Interceptors for request/response manipulation
-- Use _ObjectMapper_ to serialize/deserialize objects to/from JSON
+- Use _JsonMapper_ (Jackson 3) to serialize/deserialize objects to/from JSON

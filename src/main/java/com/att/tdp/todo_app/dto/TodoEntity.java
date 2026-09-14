@@ -12,7 +12,7 @@ public class TodoEntity {
     private Long id;
     private String title;
     private String description;
-    private boolean isCompleted;
+    private boolean completed;
 
     public Long getId() {
         return id;
@@ -38,11 +38,11 @@ public class TodoEntity {
         this.description = description;
     }
 
-    public boolean getIsCompleted() {
-        return isCompleted;
+    public boolean isCompleted() {
+        return completed;
     }
 
-    public void setIsCompleted(boolean isCompleted) {
-        this.isCompleted = isCompleted;
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
     }
 }

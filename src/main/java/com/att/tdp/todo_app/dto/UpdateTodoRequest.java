@@ -12,5 +12,5 @@ public class UpdateTodoRequest {
     @Size(max = 300)
     private String description;
 
-    private Boolean isCompleted;
+    private Boolean completed;
 }

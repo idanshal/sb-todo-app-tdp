@@ -43,8 +43,8 @@ server:
 
   
 ## Define models and entities
-- Create TodoRequest (String title, String description, Boolean isCompleted)
-- Create TodoEntity (Long id, String title, String description, Boolean isCompleted)
+- Create TodoRequest (String title, String description, Boolean completed)
+- Create TodoEntity (Long id, String title, String description, Boolean completed)
 
 ## Create TodoRepository
 ```java
@@ -117,7 +117,7 @@ spring:
 
 - At this phase, we return an Optional<TodoEntity> from the service layer. 
 If a todo doesn't exist, we return 404.
-- Finally, let's test the endpoints using Postman
+- Finally, let's test the endpoints using Bruno
 
 ## Adding error handling (git branch: 03-error-handling)
 
@@ -211,7 +211,7 @@ or field to be validated.
   - description should not be null or empty and also should have a max length of 300
 - Add validation for the POST/PUT requests so that the TodoRequest is validated
 - Add validation for the id path variable so that it is a positive number
-- Test endpoints using Postman and verify that validation works as expected
+- Test endpoints using Bruno and verify that validation works as expected
 
 ### Customizing the error response for validation errors
 
@@ -244,7 +244,7 @@ We can customize the response by adding a custom exception handler.
         return "Field '%s.%s' %s".formatted(error.getObjectName(), error.getField(), error.getDefaultMessage());
     }
 ```
-- Test endpoints using Postman and verify that validation works as expected
+- Test endpoints using Bruno and verify that validation works as expected
 
 If a validation of path variables or request parameters fails, a ConstraintViolationException will be triggered. 
 By default, Spring will translate it to a Http status 500 (Internal Server Error).
@@ -270,7 +270,7 @@ TBD
   - `@Scheduled` for scheduled tasks
   - `@Transactional` for transaction management
   - Filters & Interceptors for request/response manipulation
-- Use ObjectMapper to serialize/deserialize objects to/from JSON
+- Use JsonMapper (Jackson 3) to serialize/deserialize objects to/from JSON
 - 
 
 

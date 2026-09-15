@@ -7,7 +7,7 @@ import com.att.tdp.todo_app.dto.CreateTodoRequest;
 import com.att.tdp.todo_app.dto.TodoEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 
 @DataJpaTest
 class TodoServiceRealRepoTest {
@@ -38,6 +38,6 @@ class TodoServiceRealRepoTest {
         assertThat(savedTodo.getId()).isNotNull();
         assertThat(savedTodo.getTitle()).isEqualTo("Test");
         assertThat(savedTodo.getDescription()).isEqualTo("Test Description");
-        assertThat(savedTodo.isCompleted()).isFalse();
+        assertThat(savedTodo.getCompleted()).isFalse();
     }
 }

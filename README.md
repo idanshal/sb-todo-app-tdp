@@ -1,6 +1,6 @@
 # Practical Spring Boot for TDP
 
-![DURATION](https://img.shields.io/badge/DURATION-8h-F39C12?logo=clockify&logoColor=white)
+![DURATION](https://img.shields.io/badge/DURATION-12h-F39C12?logo=clockify&logoColor=white)
 
 
 ## Dependency Injection in Spring
@@ -270,12 +270,12 @@ public class AnotherComponent {
 
 - A working internet connection
   - Proxy settings configured on your machine
-- Java 21 (check yourself: `java --version` should result with output)   
+- Java 25 (check yourself: `java --version` should result with output)   
 - Latest _Maven_ (check yourself: `mvn --version` should result with output)  
   - Configured with jFrog repository
 - Latest _Intellij IDEA_
   - Proxy settings configured in IDE
-- Postman
+- Bruno
 - Git
 
 <br>![HANDS-ON TIME](https://img.shields.io/badge/HANDS--ON%20TIME-F39C12?logo=read-the-docs&logoColor=white)<br>
@@ -292,7 +292,7 @@ public class AnotherComponent {
 ### Spring Boot Starters
 - Spring Boot starters are built-in Spring dependency descriptors that make development easier and faster.
 - Spring Boot provides over 50 starters for various tasks and technologies. The official starters follow the naming convention `spring-boot-starter-*`, where * denotes the application type.
-- When starting the application, the starter loads all the relevant JARs. For example, if you add `spring-boot-starter-web` dependency to your `pom.xml`, Spring will load all the JARs required to create a RESTful service.
+- When starting the application, the starter loads all the relevant JARs. For example, if you add `spring-boot-starter-webmvc` dependency to your `pom.xml`, Spring will load all the JARs required to create a RESTful service.
 
 ![spring initializr](course_data/images/spring_initializr_screenshot.png)
 
@@ -326,8 +326,8 @@ server:
 
 ### Define TodoEntity
 - Add dto package
-  - Create TodoEntity (Long id, String title, String description, boolean isCompleted) - setters & getters
-  - Annotate TodoEntity with `@Entity`
+  - Create TodoEntity (Long id, String title, String description, boolean completed) - setters & getters
+  - Annotate TodoEntity with `@Entity` to mark the class as a JPA entity, so Spring/JPA maps it to a database table and persists its fields as columns.
 
 ### Create TodoRepository
 
@@ -339,6 +339,8 @@ server:
 public interface TodoRepository extends JpaRepository<TodoEntity, Long> {
 }
 ```
+
+`@Repository` tells Spring this is a data-access component, and `JpaRepository` gives us the standard CRUD operations such as `save`, `findById`, `findAll`, and `delete`, while Spring automatically implements the repository for us.
 
 ### Configure Database
 We will work with the _H2_ in-memory database for this project.
@@ -414,7 +416,7 @@ public ResponseEntity<String> hello(@RequestParam String name) {
 
 - Create request models
   - Create CreateTodoRequest (String title, String description) - setters & getters
-  - Create UpdateTodoRequest (String title, String description, Boolean isCompleted) - setters & getters 
+  - Create UpdateTodoRequest (String title, String description, Boolean completed) - setters & getters 
 - Add `@RequestMapping` to the controller class with the path "/api/todos"
 - Add the following endpoints:
 
@@ -428,7 +430,7 @@ public ResponseEntity<String> hello(@RequestParam String name) {
 
 - At this phase, we return a TodoEntity from the service layer if exists, null otherwise. 
 If a todo doesn't exist, we return 404.
-- Finally, let's test the endpoints using Postman
+- Finally, let's test the endpoints using Bruno.
 
 ## Adding error handling (git branch: 03-error-handling)
 
@@ -449,8 +451,7 @@ public class TodoNotFoundException extends RuntimeException {
 
 ### `@ExceptionHandler`
 
-`@ExceptionHandler` is a Spring annotation that provides a mechanism to treat exceptions thrown during execution of 
-controller methods.
+`@ExceptionHandler` is a Spring annotation that provides a mechanism to treat exceptions thrown during execution of controller methods.
 
 ```java
 public class FooController{
@@ -471,8 +472,7 @@ public void handleException(CustomException ex) {
 
 ### `@ControllerAdvice`
 
-The most common approach is to use `@ExceptionHandler` on methods of a `@ControllerAdvice` classes so that 
-the Spring Boot exception handling will be applied globally for all application controllers (or to a subset of controllers, if specified).
+The most common approach is to use `@ExceptionHandler` on methods of a `@ControllerAdvice` classes so that the Spring Boot exception handling will be applied globally for all application controllers (or to a subset of controllers, if specified).
 `@ControllerAdvice` is an annotation in Spring and, as the name suggests, is “advice” for multiple controllers. 
 It enables the application of a single `@ExceptionHandler` to multiple controllers. 
 With this annotation, we can define how to treat such an exception in a single place, and the system will call this handler for thrown exceptions on classes covered by this `@ControllerAdvice`.
@@ -522,17 +522,14 @@ Spring Boot’s Bean Validation support comes with the validation starter:
 </dependency>
 ```
 
-Very basically, Bean Validation works by defining constraints to the fields of a class by annotating them with 
-certain annotations, for example:
+Very basically, Bean Validation works by defining constraints to the fields of a class by annotating them with certain annotations, for example:
 `@NotNull`, `@Size`, `@Min`, `@Max`, `@NotEmpty`, `@NotBlank`, `@Pattern`, `@Positive`, `@PositiveOrZero`, `@Negative`, `@NegativeOrZero`, etc.
 
 ### @Validated and @Valid
 
-The `@Validated` annotation is a class-level annotation that we can use to tell Spring to validate parameters that 
-are passed into a method of the annotated class.
+The `@Validated` annotation is a class-level annotation that we can use to tell Spring to validate parameters that are passed into a method of the annotated class.
 
-Adding the `@Valid` annotation on method parameters and fields tells Spring that we want a method parameter 
-or field to be validated.
+Adding the `@Valid` annotation on method parameters and fields tells Spring that we want a method parameter or field to be validated.
 
 Using those annotations, we can validate a RestController user input.
 There are three things we can validate for any incoming HTTP request: Request body, Path variables, Query parameters.
@@ -549,7 +546,7 @@ There are three things we can validate for any incoming HTTP request: Request bo
   - description should have a max length of 300
 - Add validation for the POST/PUT requests so that both `CreateTodoRequest` and `UpdateTodoRequest` are validated
 - Add validation for the id path variable so that it is a positive number
-- Test endpoints using Postman and verify that validation works as expected
+- Test endpoints using Bruno and verify that validation works as expected
 
 ### Customizing the error response for validation errors
 
@@ -582,12 +579,11 @@ We can customize the response by adding a custom exception handler.
         return "Field '%s.%s' %s".formatted(error.getObjectName(), error.getField(), error.getDefaultMessage());
     }
 ```
-- Test endpoints using Postman and verify that validation works as expected
+- Test endpoints using Bruno and verify that validation works as expected
 
 If a validation of path variables or request parameters fails, a ConstraintViolationException will be triggered. 
 By default, Spring will translate it to a Http status 500 (Internal Server Error).
-If we want to return a HTTP status 400 instead (which makes sense, since the client provided an invalid parameter, making it a bad request), 
-we can add a custom exception handler.
+If we want to return a HTTP status 400 instead (which makes sense, since the client provided an invalid parameter, making it a bad request), we can add a custom exception handler.
 
 - Add an exception handler for ConstraintViolationException:
 
@@ -710,8 +706,23 @@ In pom.xml add:
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
+```
+- Also register Lombok as an explicit annotation processor in the `maven-compiler-plugin` configuration. Annotation processors on the compile classpath are only auto-discovered up to JDK 22; from JDK 23 onward (and with JDK 9+ if the project uses Java modules), the processor must be listed explicitly or it will not run:
+```xml
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+                <annotationProcessorPaths>
+                    <path>
+                        <groupId>org.projectlombok</groupId>
+                        <artifactId>lombok</artifactId>
+                    </path>
+                </annotationProcessorPaths>
+            </configuration>
+        </plugin>
 ```
 
 - IDE: enable annotation processing
@@ -726,8 +737,7 @@ to use the DB_USERNAME and DB_PASSWORD environment variables respectively
 
 ![LEARNING TIME](https://img.shields.io/badge/LEARNING%20TIME-00ADEF?logo=read-the-docs&logoColor=white)
 
-_Spring Boot_ provides several utilities and annotations to help when testing your application.
-Most developers use the spring-boot-starter-test “Starter”, which imports (in the test scope):
+_Spring Boot_ provides the general-purpose `spring-boot-starter-test` starter, as well as focused test starters and modules for specific technologies. This project uses `spring-boot-starter-webmvc-test` for MVC/controller tests and `spring-boot-starter-data-jpa-test` for JPA tests. These focused starters include the general-purpose test support together with the dependencies and test infrastructure needed for their respective technologies:
 - _Spring Test_ & _Spring Boot Test_ - utilities and integration test support for Spring Boot applications.
 - _Junit_ - the de-facto standard for unit testing Java applications.
 - _AssertJ_ - a fluent assertion library.
@@ -778,11 +788,10 @@ If you want to focus only on the web layer and not start a complete ApplicationC
 So, if your controller has some dependency to other beans from your service layer, 
 the test won't start until you either load that config yourself or provide a mock for it.
 
-### @MockBean
+### @MockitoBean
 
-Use `@MockBean` annotation to mock a bean object.
-Often, `@WebMvcTest` is limited to a single controller and is used in combination with `@MockBean` 
-to provide mock implementations for required dependencies.
+Use `@MockitoBean` annotation to mock a bean object.
+Often, `@WebMvcTest` is limited to a single controller and is used in combination with `@MockitoBean` to provide mock implementations for required dependencies.
 
 
 
@@ -884,4 +893,4 @@ anotherBean.getLazyBean();
   - `@Scheduled` for scheduled tasks
   - `@Transactional` for transaction management
   - Filters & Interceptors for request/response manipulation
-- Use _ObjectMapper_ to serialize/deserialize objects to/from JSON
+- Use _JsonMapper_ (Jackson 3) to serialize/deserialize objects to/from JSON

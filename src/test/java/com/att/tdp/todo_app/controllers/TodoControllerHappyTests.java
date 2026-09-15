@@ -3,15 +3,15 @@ package com.att.tdp.todo_app.controllers;
 import com.att.tdp.todo_app.helpers.TodoTestHelper;
 import com.att.tdp.todo_app.dal.TodoRepository;
 import com.att.tdp.todo_app.dto.TodoEntity;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class TodoControllerHappyTests {
 
     @Autowired
-    ObjectMapper objectMapper;
+    JsonMapper jsonMapper;
 
     @Autowired
     private MockMvc mockMvc;
@@ -95,7 +95,7 @@ class TodoControllerHappyTests {
                 .getContentAsString();
 
         // assert
-        TodoEntity todoEntity = objectMapper.readValue(response, TodoEntity.class);
+        TodoEntity todoEntity = jsonMapper.readValue(response, TodoEntity.class);
         assertThat(todoEntity.getId()).isEqualTo(savedTodo.getId());
         assertThat(todoEntity.getTitle()).isEqualTo(savedTodo.getTitle());
         assertThat(todoEntity.getDescription()).isEqualTo(savedTodo.getDescription());

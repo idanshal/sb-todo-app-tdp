@@ -36,6 +36,6 @@ class TodoServiceMockRepoTest {
         TodoEntity capturedTodo = captor.getValue();
         assertThat(capturedTodo.getTitle()).isEqualTo("Test");
         assertThat(capturedTodo.getDescription()).isEqualTo("Test Description");
-        assertThat(capturedTodo.isCompleted()).isFalse();
+        assertThat(capturedTodo.getCompleted()).isFalse();
     }
 }

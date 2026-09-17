@@ -43,6 +43,7 @@ server:
 ## Define models and entities
 - Create TodoRequest (String title, String description, Boolean completed)
 - Create TodoEntity (Long id, String title, String description, Boolean completed)
+  - Annotate the `id` property with `@Id` and `@GeneratedValue(strategy = GenerationType.IDENTITY)`, imported from `jakarta.persistence`
 
 ## Create TodoRepository
 ```java

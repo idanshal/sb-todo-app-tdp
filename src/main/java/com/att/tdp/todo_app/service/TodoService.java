@@ -1,4 +1,4 @@
-package com.att.tdp.todo_app.services;
+package com.att.tdp.todo_app.service;
 
 import org.springframework.stereotype.Service;
 

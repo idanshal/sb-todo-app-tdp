@@ -1,6 +1,6 @@
-package com.att.tdp.todo_app.controllers;
+package com.att.tdp.todo_app.controller;
 
-import com.att.tdp.todo_app.services.TodoService;
+import com.att.tdp.todo_app.service.TodoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

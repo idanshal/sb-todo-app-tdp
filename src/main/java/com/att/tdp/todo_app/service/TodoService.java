@@ -4,7 +4,7 @@ import com.att.tdp.todo_app.repository.TodoRepository;
 import com.att.tdp.todo_app.entity.TodoEntity;
 import com.att.tdp.todo_app.dto.CreateTodoRequest;
 import com.att.tdp.todo_app.dto.UpdateTodoRequest;
-import com.att.tdp.todo_app.exceptions.TodoNotFoundException;
+import com.att.tdp.todo_app.exception.TodoNotFoundException;
 import org.hibernate.sql.Update;
 import org.springframework.stereotype.Service;
 

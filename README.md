@@ -43,9 +43,10 @@ server:
 
   
 ## Define models and entities
-  - Annotate the `id` property with `@Id` and `@GeneratedValue(strategy = GenerationType.IDENTITY)`, imported from `jakarta.persistence`
 - Create TodoRequest (String title, String description, Boolean completed)
 - Create TodoEntity (Long id, String title, String description, Boolean completed)
+  - Annotate the `id` property with `@Id` and `@GeneratedValue(strategy = GenerationType.IDENTITY)`, so JPA recognizes it as the primary key and delegates its generation to the database's identity column.
+    - Make sure `@Id`, `@GeneratedValue`, and `GenerationType` are imported from the `jakarta.persistence` package.
 
 ## Create TodoRepository
 ```java

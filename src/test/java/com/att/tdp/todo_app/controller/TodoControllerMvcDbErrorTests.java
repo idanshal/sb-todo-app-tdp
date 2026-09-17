@@ -1,6 +1,6 @@
-package com.att.tdp.todo_app.controllers;
+package com.att.tdp.todo_app.controller;
 
-import com.att.tdp.todo_app.dal.TodoRepository;
+import com.att.tdp.todo_app.repository.TodoRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

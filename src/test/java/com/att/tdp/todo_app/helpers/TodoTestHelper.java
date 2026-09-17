@@ -1,7 +1,7 @@
 package com.att.tdp.todo_app.helpers;
 
 
-import com.att.tdp.todo_app.dto.TodoEntity;
+import com.att.tdp.todo_app.entity.TodoEntity;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 

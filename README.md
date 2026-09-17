@@ -275,7 +275,7 @@ public class AnotherComponent {
   - Configured with jFrog repository
 - Latest _Intellij IDEA_
   - Proxy settings configured in IDE
-- Bruno
+- A REST client capable of running requests.http files (e.g. the VS Code REST Client extension)
 - Git
 
 <br>![HANDS-ON TIME](https://img.shields.io/badge/HANDS--ON%20TIME-F39C12?logo=read-the-docs&logoColor=white)<br>
@@ -325,13 +325,13 @@ server:
 ```
 
 ### Define TodoEntity
-- Add dto package
+- Add entity package
   - Create TodoEntity (Long id, String title, String description, boolean completed) - setters & getters
   - Annotate TodoEntity with `@Entity` to mark the class as a JPA entity, so Spring/JPA maps it to a database table and persists its fields as columns.
 
 ### Create TodoRepository
 
-- Create dal package
+- Create repository package
     - Create TodoRepository:
 
 ```java
@@ -367,9 +367,9 @@ spring:
 `@Component` is a generic stereotype for any Spring-managed component.
 `@Repository`, `@Service`, and `@Controller` are specializations of `@Component` for more specific use cases (in the persistence, service, and presentation layers, respectively).
 
-- create a controllers package
+- create a controller package
   - create TodoController
-- create a services package
+- create a service package
   - create TodoService 
 - TEMP - will be deleted after this section
   - add some temporary code to the controller to call the service
@@ -430,7 +430,7 @@ public ResponseEntity<String> hello(@RequestParam String name) {
 
 - At this phase, we return a TodoEntity from the service layer if exists, null otherwise. 
 If a todo doesn't exist, we return 404.
-- Finally, let's test the endpoints using Bruno.
+- Finally, let's test the endpoints using the requests.http file.
 
 ## Adding error handling (git branch: 03-error-handling)
 
@@ -546,7 +546,7 @@ There are three things we can validate for any incoming HTTP request: Request bo
   - description should have a max length of 300
 - Add validation for the POST/PUT requests so that both `CreateTodoRequest` and `UpdateTodoRequest` are validated
 - Add validation for the id path variable so that it is a positive number
-- Test endpoints using Bruno and verify that validation works as expected
+- Test endpoints using the requests.http file and verify that validation works as expected
 
 ### Customizing the error response for validation errors
 
@@ -579,7 +579,7 @@ We can customize the response by adding a custom exception handler.
         return "Field '%s.%s' %s".formatted(error.getObjectName(), error.getField(), error.getDefaultMessage());
     }
 ```
-- Test endpoints using Bruno and verify that validation works as expected
+- Test endpoints using the requests.http file and verify that validation works as expected
 
 If a validation of path variables or request parameters fails, a ConstraintViolationException will be triggered. 
 By default, Spring will translate it to a Http status 500 (Internal Server Error).

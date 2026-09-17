@@ -1,10 +1,10 @@
-package com.att.tdp.todo_app.services;
+package com.att.tdp.todo_app.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.att.tdp.todo_app.dal.TodoRepository;
+import com.att.tdp.todo_app.repository.TodoRepository;
 import com.att.tdp.todo_app.dto.CreateTodoRequest;
-import com.att.tdp.todo_app.dto.TodoEntity;
+import com.att.tdp.todo_app.entity.TodoEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;

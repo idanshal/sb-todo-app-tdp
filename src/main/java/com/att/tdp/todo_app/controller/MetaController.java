@@ -1,4 +1,4 @@
-package com.att.tdp.todo_app.controllers;
+package com.att.tdp.todo_app.controller;
 
 import com.att.tdp.todo_app.config.TodoAppConfig;
 import org.springframework.beans.factory.annotation.Autowired;

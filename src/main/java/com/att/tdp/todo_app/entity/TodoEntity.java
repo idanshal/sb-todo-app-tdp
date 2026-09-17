@@ -1,4 +1,4 @@
-package com.att.tdp.todo_app.dto;
+package com.att.tdp.todo_app.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

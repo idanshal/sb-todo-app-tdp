@@ -15,10 +15,7 @@ It creates the objects (**Beans**), configures and assembles their dependencies,
 It gets information about the objects from the Java Code and Annotations.
 
 ### Bean
-The managed object (instance) by Spring.
-- Spring manages bean creation\destruction
-- Spring manages bean dependencies (by injection)
-- Spring manages bean scope (singleton or prototype)
+An object that the _Spring_ container instantiates, assembles, and manages.
 
 ### ApplicationContext
 
@@ -26,11 +23,8 @@ ApplicationContext is the _Spring_ interface representing the IoC container. App
 To obtain a bean from ApplicationContext, use the getBean() function and specify bean ID or interface\class. In case of no ambiguity – _Spring_ will automatically know which bean to extract for you.
 
 ```java
-ApplicationContext ctx = new AnnotationConfigApplicationContext(
-				"com.att.course.spring.demo.components");
-
-MyBean bean1 = ctx.getBean(MyBean.class);
-MyBean bean2 = ctx.getBean("MyBean");
+MyBean bean1 = applicationContext.getBean(MyBean.class); // by type
+Object bean2 = applicationContext.getBean("myBean"); // by name
 ```
 
 ![spring_ioc_container.png](course_data/images/spring_ioc_container.png)
@@ -40,8 +34,8 @@ MyBean bean2 = ctx.getBean("MyBean");
 An application should provide the bean configuration to the ApplicationContext container. <br/>
 A Spring bean configuration consists of one or more beans definitions. <br/>
 _Spring_ supports different ways of configuring beans:
-- `@Bean`-annotated methods within a `@Configuration` class
-- `@Component`-annotated classes
+- `@Bean` annotated methods within a `@Configuration` annotated class
+- `@Component` annotated classes
 
 #### `@Bean`-annotated methods within a `@Configuration` class
 
@@ -61,12 +55,11 @@ public class ComponentsConfig {
 	}
 }
 
-ApplicationContext ctx = new AnnotationConfigApplicationContext(ComponentsConfig.class);
-MyComponent comp = ctx.getBean(MyComponent.class);
+MyComponent comp = applicationContext.getBean(MyComponent.class);
 ```
 #### `@Component`-annotated classes
 
-- Mark a class by one from the Spring annotations: `@Component`, `@Controller`, `@Service`, and `@Repository`.
+- Annotate a class using one of the _Spring_ annotations: `@Component`, `@Controller`, `@Service`, and `@Repository`.
   - `@Controller`, `@Service` and `@Repository` are special types of `@Component` annotation.
 - Spring will automatically detect these classes as beans.
 
@@ -76,8 +69,7 @@ public class MyComponent {
 	// the component code
 }
 
-ApplicationContext ctx = new AnnotationConfigApplicationContext("com.att.course.spring.demo.components");
-MyComponent comp = ctx.getBean(MyComponent.class);
+MyComponent comp = applicationContext.getBean(MyComponent.class);
 ```
 
 #### `@Bean` vs `@Component`
@@ -141,25 +133,23 @@ public class Component2 {
 }
 ```
 
-- Why prefer Constructor Injection:
-  - An object must be created with the full and correct state.
-  - The app can define for the object a mock dependency in a unit test.
-  - An object can be specified as immutable (for example, to gain thread safety).
-- Why prefer Field Injection:
-  - The more readable code; allows focusing on business logic.
-  - When some of the object’s properties could be optional.
-- Why prefer Setter Injection:
-  - When you need some “smart setter”, for example, for additional validation.
+| Injection Type   | When to Use                     | Pros                            | Cons                           |
+|------------------|--------------------------------|--------------------------------|--------------------------------|
+| **Constructor**  | Preferred for mandatory dependencies | Immutable, clear, testable       | Slightly more boilerplate       |
+| **Field**        | Quick prototyping, simple cases | Less boilerplate                 | Hard to test, hidden dependencies |
+| **Setter**       | Optional or changeable dependencies | Flexible, solves circular dependencies | Mutable, dependencies not enforced |
 
-Note: Constructor Injection is the most straightforward and recommended way of dependency injection!
+Best practice:
+**Constructor injection** is highly recommended for most cases due to clarity, immutability, and better testability. Use setter injection only when you need optional dependencies or to resolve circular dependencies. Avoid field injection for production code.
+
 
 ### `@Autowired`
 
-- Spring `@Autowired` annotation is used for automatic dependency injection. Using the annotation, we instruct Spring to inject the bean “auto-magically”.
+- The Spring `@Autowired` annotation is used for automatic dependency injection. By using this annotation, we instruct Spring to inject the bean “auto-magically”.
 The process of Spring bean injection is called autowiring.
-- `@Autowired` is generally used for field and setter injection. It can also be used with a constructor, to denote to Spring that this is the constructor to use for bean creation. But classes with a single constructor can omit the `@Autowired` annotation.
-- `@Autowired` on fields happens AFTER calling the constructor.
-- `@Autowired` is by default required and will fail in the case cannot be fulfilled. Change it by adding `@Autowired(required = false)`
+- `@Autowired` is generally used for field and setter injection. It can also be applied to a constructor to indicate to Spring which constructor to use for bean creation. However, classes with a single constructor can omit the `@Autowired` annotation.
+- Field injection using `@Autowired` occurs after the constructor is called.
+- By default, `@Autowired` is required and will cause a failure in case the dependency cannot be fulfilled. You can change this behavior by adding `@Autowired(required = false)`
 
 By default, Spring resolves @Autowired entries by type.
 
@@ -198,7 +188,7 @@ To resolve this conflict, we need to tell Spring explicitly which bean we want t
 ##### Autowiring by @Qualifier
 
 ```java
-public class MyComponent extends BaseComponent {
+public class Component extends BaseComponent {
   // some code
 }
 
@@ -263,16 +253,16 @@ public class AnotherComponent {
 
 ### Bean Scanning and Registration
 
-- Spring can automatically scan and register in the application context all your beans,
+- _Spring_ can automatically scan and register all your beans in the application context,
   such as configurations, controllers, services, and other components you define.
-- Spring can also automatically create and register beans from the jars that are added to your application.
+- _Spring_ can also automatically create and register beans from the JARs added to your application.
 
 #### Bean Scanning and Registration – HOW ?
 
-- Use the annotation `@ComponentScan` to automatically scan and register for all beans, defined under the current package and all sub-packages.
-- Use the annotation `@EnableAutoConfiguration` to automatically create and register beans also from the jars that are added to your application.
-- But even better – use the annotation `@SpringBootApplication`, which enables `@ComponentScan`, `@EnableAutoConfiguration`, and `@Configuration` annotations.
-- Usually, these annotations are placed with the main application class (that’s why it is generally recommended to locate it in a root package above other classes).
+- Use the `@ComponentScan` annotation to automatically scan and register all beans defined in the current package and its sub-packages.
+- Use `@EnableAutoConfiguration` annotation to automatically create and register beans from the JARs added to your application.
+- Even better, use the `@SpringBootApplication` annotation, which combines `@ComponentScan`, `@EnableAutoConfiguration`, and `@Configuration`.
+- These annotations are usually placed on the main application class, which is why it is generally recommended to locate that class in a root package above other classes.
 
 ## Creating a Spring Boot Application from Scratch (Todo App)
 
@@ -300,9 +290,9 @@ public class AnotherComponent {
 - Fill in the project metadata and generate
 
 ### Spring Boot Starters
-- Spring Boot starters are built-in Spring dependency descriptors that make development easier and rapid.
-- Spring Boot provides around 50+ starters, for various tasks and technologies. The official starters follow a naming convention spring-boot-starter-*, where * denotes application type.
-- When starting the application, the starter will load all the relevant JARs (for example, if you entered to the pom.xml dependency to spring-boot-starter-webmvc, Spring would load all jar required for creating RESTful service).
+- Spring Boot starters are built-in Spring dependency descriptors that make development easier and faster.
+- Spring Boot provides over 50 starters for various tasks and technologies. The official starters follow the naming convention `spring-boot-starter-*`, where * denotes the application type.
+- When starting the application, the starter loads all the relevant JARs. For example, if you add `spring-boot-starter-webmvc` dependency to your `pom.xml`, Spring will load all the JARs required to create a RESTful service.
 
 ![spring initializr](course_data/images/spring_initializr_screenshot.png)
 
@@ -312,8 +302,8 @@ public class AnotherComponent {
 - Review pom.xml
   - Inspect dependencies
 - Review `@SpringBootApplication`
-  - From SpringApplication.run, the application will create the application context, that contains all the required Beans. 
-  - In the case of using a Web starter, it will also create an instance of Tomcat web server.
+  - When `SpringApplication.run` is called, the application creates an application context that contains all the required Beans. 
+  - If a Web starter is used, it also initializes an embedded Tomcat web server instance.
 ```java
 @SpringBootApplication
 public class TodoAppApplication {
@@ -327,6 +317,7 @@ public class TodoAppApplication {
 - Verify the application compiles and runs successfully
   - View logs in the console ![app start logs](course_data/images/app_start_logs.png)
     - Note that application server (Tomcat) starts on port 8080
+- Rename application.properties to application.yml & clear the file contents.
 - Review application.yml and set the port to 8081. Restart the application and verify it starts on port 8081
 ```yaml
 server:
@@ -336,6 +327,7 @@ server:
 ### Define TodoEntity
 - Add entity package
   - Create TodoEntity (Long id, String title, String description, boolean completed) - setters & getters
+  - Annotate TodoEntity with `@Entity` to mark the class as a JPA entity, so Spring/JPA maps it to a database table and persists its fields as columns.
   - Annotate the `id` property with `@Id` and `@GeneratedValue(strategy = GenerationType.IDENTITY)`, so JPA recognizes it as the primary key and delegates its generation to the database's identity column.
     - Make sure `@Id`, `@GeneratedValue`, and `GenerationType` are imported from the `jakarta.persistence` package.
 
@@ -349,6 +341,8 @@ server:
 public interface TodoRepository extends JpaRepository<TodoEntity, Long> {
 }
 ```
+
+`@Repository` tells Spring this is a data-access component, and `JpaRepository` gives us the standard CRUD operations such as `save`, `findById`, `findAll`, and `delete`, while Spring automatically implements the repository for us.
 
 ### Configure Database
 We will work with the _H2_ in-memory database for this project.
@@ -438,7 +432,7 @@ public ResponseEntity<String> hello(@RequestParam String name) {
 
 - At this phase, we return a TodoEntity from the service layer if exists, null otherwise. 
 If a todo doesn't exist, we return 404.
-- Finally, let's test the endpoints using the requests.http file
+- Finally, let's test the endpoints using the requests.http file.
 
 ## Adding error handling (git branch: 03-error-handling)
 
@@ -447,12 +441,19 @@ If a todo doesn't exist, we return 404.
 - First let's refactor our service layer to throw exceptions in case a todo is not found.
   - For that purpose, create an exception package and a custom exception class `TodoNotFoundException`
 
+```java
+public class TodoNotFoundException extends RuntimeException {
+    public TodoNotFoundException(String message) {
+        super(message);
+    }
+}
+```
+
 ![LEARNING TIME](https://img.shields.io/badge/LEARNING%20TIME-00ADEF?logo=read-the-docs&logoColor=white)
 
 ### `@ExceptionHandler`
 
-`@ExceptionHandler` is a Spring annotation that provides a mechanism to treat exceptions thrown during execution of 
-controller methods.
+`@ExceptionHandler` is a Spring annotation that provides a mechanism to treat exceptions thrown during execution of controller methods.
 
 ```java
 public class FooController{
@@ -473,8 +474,7 @@ public void handleException(CustomException ex) {
 
 ### `@ControllerAdvice`
 
-The most common approach is to use `@ExceptionHandler` on methods of a `@ControllerAdvice` classes so that 
-the Spring Boot exception handling will be applied globally for all application controllers (or to a subset of controllers, if specified).
+The most common approach is to use `@ExceptionHandler` on methods of a `@ControllerAdvice` classes so that the Spring Boot exception handling will be applied globally for all application controllers (or to a subset of controllers, if specified).
 `@ControllerAdvice` is an annotation in Spring and, as the name suggests, is “advice” for multiple controllers. 
 It enables the application of a single `@ExceptionHandler` to multiple controllers. 
 With this annotation, we can define how to treat such an exception in a single place, and the system will call this handler for thrown exceptions on classes covered by this `@ControllerAdvice`.
@@ -524,23 +524,14 @@ Spring Boot’s Bean Validation support comes with the validation starter:
 </dependency>
 ```
 
-Very basically, Bean Validation works by defining constraints to the fields of a class by annotating them with 
-certain annotations, for example:
-@NotNull
-@Size
-@Min and @Max
-@NotEmpty, @NotBlank
-@Pattern
-@Positive, @PositiveOrZero, @Negative, @NegativeOrZero
-Etc.
+Very basically, Bean Validation works by defining constraints to the fields of a class by annotating them with certain annotations, for example:
+`@NotNull`, `@Size`, `@Min`, `@Max`, `@NotEmpty`, `@NotBlank`, `@Pattern`, `@Positive`, `@PositiveOrZero`, `@Negative`, `@NegativeOrZero`, etc.
 
 ### @Validated and @Valid
 
-The `@Validated` annotation is a class-level annotation that we can use to tell Spring to validate parameters that 
-are passed into a method of the annotated class.
+The `@Validated` annotation is a class-level annotation that we can use to tell Spring to validate parameters that are passed into a method of the annotated class.
 
-Adding the `@Valid` annotation on method parameters and fields tells Spring that we want a method parameter 
-or field to be validated.
+Adding the `@Valid` annotation on method parameters and fields tells Spring that we want a method parameter or field to be validated.
 
 Using those annotations, we can validate a RestController user input.
 There are three things we can validate for any incoming HTTP request: Request body, Path variables, Query parameters.
@@ -548,11 +539,14 @@ There are three things we can validate for any incoming HTTP request: Request bo
 
 ![HANDS-ON TIME](https://img.shields.io/badge/HANDS--ON%20TIME-F39C12?logo=read-the-docs&logoColor=white)<br>
 
-- Add the spring-boot-starter-validation dependency to the pom.xml
-- Add validation annotations to the TodoRequest class
+- Add _spring-boot-starter-validation_ dependency to pom.xml
+- Add validation annotations to the CreateTodoRequest class
   - title should not be null or empty and also should have a min length of 3 and a max length of 100
   - description should not be null or empty and also should have a max length of 300
-- Add validation for the POST/PUT requests so that the TodoRequest is validated
+- Add validation annotations to the UpdateTodoRequest class
+  - title should have a min length of 3 and a max length of 100
+  - description should have a max length of 300
+- Add validation for the POST/PUT requests so that both `CreateTodoRequest` and `UpdateTodoRequest` are validated
 - Add validation for the id path variable so that it is a positive number
 - Test endpoints using the requests.http file and verify that validation works as expected
 
@@ -591,8 +585,7 @@ We can customize the response by adding a custom exception handler.
 
 If a validation of path variables or request parameters fails, a ConstraintViolationException will be triggered. 
 By default, Spring will translate it to a Http status 500 (Internal Server Error).
-If we want to return a HTTP status 400 instead (which makes sense, since the client provided an invalid parameter, making it a bad request), 
-we can add a custom exception handler.
+If we want to return a HTTP status 400 instead (which makes sense, since the client provided an invalid parameter, making it a bad request), we can add a custom exception handler.
 
 - Add an exception handler for ConstraintViolationException:
 
@@ -678,7 +671,7 @@ todo-app:
 - Inject the server.port property into the MetaController (use @Value) and return it as a response for GET /api/meta/port
 - Inject the Environment object into the MetaController and return the JAVA_HOME environment variable as a response for GET /api/meta/java-home
 - Inject the PATH environment variable into the MetaController (use @Value) and return it as a response for GET /api/meta/path
-- Test the endpoints using the requests.http file
+- Test the endpoints using Postman
 
 ## Touch-ups (git branch - 07-touch-ups)
 
@@ -746,7 +739,7 @@ to use the DB_USERNAME and DB_PASSWORD environment variables respectively
 
 ![LEARNING TIME](https://img.shields.io/badge/LEARNING%20TIME-00ADEF?logo=read-the-docs&logoColor=white)
 
-_Spring Boot_ provides both a general-purpose spring-boot-starter-test starter and focused per-technology test starters. This project uses spring-boot-starter-webmvc-test for MVC/controller tests and spring-boot-starter-data-jpa-test for JPA tests, which import (in the test scope):
+_Spring Boot_ provides the general-purpose `spring-boot-starter-test` starter, as well as focused test starters and modules for specific technologies. This project uses `spring-boot-starter-webmvc-test` for MVC/controller tests and `spring-boot-starter-data-jpa-test` for JPA tests. These focused starters include the general-purpose test support together with the dependencies and test infrastructure needed for their respective technologies:
 - _Spring Test_ & _Spring Boot Test_ - utilities and integration test support for Spring Boot applications.
 - _Junit_ - the de-facto standard for unit testing Java applications.
 - _AssertJ_ - a fluent assertion library.
@@ -799,9 +792,8 @@ the test won't start until you either load that config yourself or provide a moc
 
 ### @MockitoBean
 
-`@MockBean`/`@SpyBean` were removed in Spring Boot 4; use `@MockitoBean` annotation to mock a bean object instead.
-Often, `@WebMvcTest` is limited to a single controller and is used in combination with `@MockitoBean` 
-to provide mock implementations for required dependencies.
+Use `@MockitoBean` annotation to mock a bean object.
+Often, `@WebMvcTest` is limited to a single controller and is used in combination with `@MockitoBean` to provide mock implementations for required dependencies.
 
 
 

@@ -437,7 +437,7 @@ If a todo doesn't exist, we return 404.
 <br>![HANDS-ON TIME](https://img.shields.io/badge/HANDS--ON%20TIME-F39C12?logo=read-the-docs&logoColor=white)<br>
 
 - First let's refactor our service layer to throw exceptions in case a todo is not found.
-  - For that purpose, create an exceptions package and a custom exception class `TodoNotFoundException`
+  - For that purpose, create an exception package and a custom exception class `TodoNotFoundException`
 
 ```java
 public class TodoNotFoundException extends RuntimeException {

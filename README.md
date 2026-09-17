@@ -336,6 +336,7 @@ server:
 ### Define TodoEntity
 - Add entity package
   - Create TodoEntity (Long id, String title, String description, boolean completed) - setters & getters
+  - Annotate the `id` property with `@Id` and `@GeneratedValue(strategy = GenerationType.IDENTITY)`, imported from `jakarta.persistence`
 
 ### Create TodoRepository
 

@@ -1,8 +1,8 @@
-package com.att.tdp.todo_app.services;
+package com.att.tdp.todo_app.service;
 
-import com.att.tdp.todo_app.dal.TodoRepository;
+import com.att.tdp.todo_app.repository.TodoRepository;
 import com.att.tdp.todo_app.dto.CreateTodoRequest;
-import com.att.tdp.todo_app.dto.TodoEntity;
+import com.att.tdp.todo_app.entity.TodoEntity;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;

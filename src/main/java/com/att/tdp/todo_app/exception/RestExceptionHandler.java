@@ -1,6 +1,8 @@
 package com.att.tdp.todo_app.exception;
 
 import com.att.tdp.todo_app.dto.ErrorDto;
+import jakarta.validation.ConstraintViolationException;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -30,6 +32,25 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     public ErrorDto handleIllegalArgumentException(IllegalArgumentException e) {
         return new ErrorDto("101", e.getMessage());
     }
+
+    @ExceptionHandler(DataAccessException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorDto handleDataAccessException(DataAccessException ex) {
+        return new ErrorDto("103",ex.getMessage());
+    }
+
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorDto handleGeneralException(Exception ex) {
+        return new ErrorDto("105",ex.getMessage());
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorDto handleConstraintViolationException(ConstraintViolationException ex) {
+        return new ErrorDto("102",ex.getMessage());
+    }
+
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,

@@ -39,7 +39,7 @@ public class TodoAppApplication {
 server:
   port: 8081
 ```
-- Add packages: dto, controllers, services, dal
+- Add packages: dto, entity, controller, service, repository
 
   
 ## Define models and entities
@@ -117,7 +117,7 @@ spring:
 
 - At this phase, we return an Optional<TodoEntity> from the service layer. 
 If a todo doesn't exist, we return 404.
-- Finally, let's test the endpoints using Bruno
+- Finally, let's test the endpoints using the requests.http file
 
 ## Adding error handling (git branch: 03-error-handling)
 
@@ -211,7 +211,7 @@ or field to be validated.
   - description should not be null or empty and also should have a max length of 300
 - Add validation for the POST/PUT requests so that the TodoRequest is validated
 - Add validation for the id path variable so that it is a positive number
-- Test endpoints using Bruno and verify that validation works as expected
+- Test endpoints using the requests.http file and verify that validation works as expected
 
 ### Customizing the error response for validation errors
 
@@ -244,7 +244,7 @@ We can customize the response by adding a custom exception handler.
         return "Field '%s.%s' %s".formatted(error.getObjectName(), error.getField(), error.getDefaultMessage());
     }
 ```
-- Test endpoints using Bruno and verify that validation works as expected
+- Test endpoints using the requests.http file and verify that validation works as expected
 
 If a validation of path variables or request parameters fails, a ConstraintViolationException will be triggered. 
 By default, Spring will translate it to a Http status 500 (Internal Server Error).

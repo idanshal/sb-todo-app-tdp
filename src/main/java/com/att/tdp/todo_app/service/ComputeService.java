@@ -1,4 +1,4 @@
-package com.att.tdp.todo_app.services;
+package com.att.tdp.todo_app.service;
 
 import jakarta.annotation.PostConstruct;
 import lombok.SneakyThrows;

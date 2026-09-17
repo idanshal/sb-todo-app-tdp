@@ -1,0 +1,60 @@
+### Get all todos
+GET http://localhost:8081/api/todos
+
+### Simulate IllegalArgumentException
+GET http://localhost:8081/api/todos/illegal
+
+### Get todo by id
+GET http://localhost:8081/api/todos/1
+
+### Get todo by id - validation error (non-positive id)
+GET http://localhost:8081/api/todos/-1
+
+### Create todo
+POST http://localhost:8081/api/todos
+Content-Type: application/json
+
+{
+  "title": "Learn VS Code REST Client",
+  "description": "Test endpoints from inside VS Code"
+}
+
+### Create todo - validation error (title too short)
+POST http://localhost:8081/api/todos
+Content-Type: application/json
+
+{
+  "title": "a",
+  "description": "Test endpoints from inside VS Code"
+}
+
+### Update todo
+PUT http://localhost:8081/api/todos/1
+Content-Type: application/json
+
+{
+  "title": "Updated title",
+  "description": "Updated from VS Code",
+  "completed": true
+}
+
+### Delete todo
+DELETE http://localhost:8081/api/todos/1
+
+### Meta
+GET http://localhost:8081/api/meta
+
+### Meta version
+GET http://localhost:8081/api/meta/version
+
+### Meta port
+GET http://localhost:8081/api/meta/port
+
+### Meta Java home
+GET http://localhost:8081/api/meta/java-home
+
+### Meta path
+GET http://localhost:8081/api/meta/path
+
+### Trigger async compute
+GET http://localhost:8081/api/todos/compute

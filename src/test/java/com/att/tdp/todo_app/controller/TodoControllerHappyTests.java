@@ -1,8 +1,8 @@
-package com.att.tdp.todo_app.controllers;
+package com.att.tdp.todo_app.controller;
 
 import com.att.tdp.todo_app.helpers.TodoTestHelper;
-import com.att.tdp.todo_app.dal.TodoRepository;
-import com.att.tdp.todo_app.dto.TodoEntity;
+import com.att.tdp.todo_app.repository.TodoRepository;
+import com.att.tdp.todo_app.entity.TodoEntity;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

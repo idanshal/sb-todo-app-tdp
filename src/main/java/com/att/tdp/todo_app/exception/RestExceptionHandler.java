@@ -1,4 +1,4 @@
-package com.att.tdp.todo_app.exceptions;
+package com.att.tdp.todo_app.exception;
 
 import com.att.tdp.todo_app.dto.ErrorDto;
 import org.springframework.http.HttpHeaders;

@@ -328,6 +328,8 @@ server:
 - Add entity package
   - Create TodoEntity (Long id, String title, String description, boolean completed) - setters & getters
   - Annotate TodoEntity with `@Entity` to mark the class as a JPA entity, so Spring/JPA maps it to a database table and persists its fields as columns.
+  - Annotate the `id` property with `@Id` and `@GeneratedValue(strategy = GenerationType.IDENTITY)`, so JPA recognizes it as the primary key and delegates its generation to the database's identity column.
+    - Make sure `@Id`, `@GeneratedValue`, and `GenerationType` are imported from the `jakarta.persistence` package.
 
 ### Create TodoRepository
 

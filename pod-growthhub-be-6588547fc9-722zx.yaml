@@ -1,0 +1,273 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    config.linkerd.io/proxy-cpu-request: 200m
+    config.linkerd.io/proxy-memory-limit: 2Gi
+    config.linkerd.io/proxy-memory-request: 128Mi
+    kubectl.kubernetes.io/default-container: growthhub-be
+    linkerd.io/inject: enabled
+    version: 1.0.851
+  creationTimestamp: "2026-09-03T11:43:55Z"
+  generateName: growthhub-be-6588547fc9-
+  generation: 1
+  labels:
+    app: growthhub-be
+    pod-template-hash: 6588547fc9
+  name: growthhub-be-6588547fc9-722zx
+  namespace: growthhub-stage
+  ownerReferences:
+  - apiVersion: apps/v1
+    blockOwnerDeletion: true
+    controller: true
+    kind: ReplicaSet
+    name: growthhub-be-6588547fc9
+    uid: 495420a5-262f-48f1-ab85-8d240941409c
+  resourceVersion: "261602446"
+  uid: ede18997-1041-4679-9c47-bd8063a8e070
+spec:
+  containers:
+  - args:
+    - --server.port=8080
+    - --spring.config.import=configtree:/mnt/secrets-store//
+    - --app.config.dir=file:$(APP_CONF_PATH)
+    - --temporal-frontend=temporal-dev-internal-frontend-headless.temporal-dev.svc.cluster.local:7236
+    - --db_url_databricks=jdbc:databricks://adb-1907514935026861.1.azuredatabricks.net:443/default;transportMode=http;ssl=1;AuthMech=3;httpPath=/sql/1.0/warehouses/9e65c68b54b50112;EnableArrow=0;
+    - --db_url_pg=jdbc:postgresql://growthhub-eastus2-dev-psqlflex.postgres.database.azure.com:5432/growth_hub_stage?ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory
+    - --db_schema_databricks=28340_teamup_prd.skillup_gold_stg
+    - --temporal-namespace=temporal-stage
+    - --key-file-path=/mnt/secrets-store//client.key
+    - --cert-file-path=/mnt/secrets-store//client.cert
+    - --ca-file-path=/mnt/secrets-store//ca.cert
+    - --dns-server-name=temporal-dev-internal-frontend-headless.temporal-dev.svc.cluster.local
+    - --enable-https=true
+    - --email_host=
+    - --email_port=
+    - --candidate_url=
+    - --enable-swagger=false
+    - --gh_env=stage
+    - --gh_env_tier=nprd
+    - --ca_base_url=https://ple-cdp.test.att.com
+    - --star_api_base_url=https://star.att.com
+    - --whats-new-lookback-days=90
+    - --redis_host=growthhub-dev.eastus2.redis.azure.net
+    - --redis_port=10000
+    - --redis_username=default
+    - --redis_ttl=10m
+    - --kafka_bootstrap_servers=growthhub-event-hub-stage.servicebus.windows.net:9093
+    - --kafka_consumer_group_id=gh-consumer-group
+    env:
+    - name: APPLICATIONINSIGHTS_CONNECTION_STRING
+      valueFrom:
+        secretKeyRef:
+          key: applicationinsights_connection_string
+          name: growthhub-be-instrumentationkey
+          optional: true
+    - name: APPLICATIONINSIGHTS_ROLE_NAME
+      value: growthhub-be-stage
+    - name: APP_CONF_PATH
+      value: /application/config
+    - name: JAVA_TOOL_OPTIONS
+      value: -XX:InitialRAMPercentage=75 -XX:MaxRAMPercentage=75 -XX:MaxMetaspaceSize=256M
+        -XX:ActiveProcessorCount=2 -XX:MaxDirectMemorySize=100M -XX:+HeapDumpOnOutOfMemoryError
+        -XX:HeapDumpPath=/application/heap-dumps/oom.hprof -XX:+UseG1GC -XX:+UseStringDeduplication
+        -Dio.netty.noPreferDirect=true -Dhttps.proxyHost=proxy.conexus.svc.local -Dhttps.proxyPort=3128
+        -Dhttp.nonProxyHosts=*.in.applicationinsights.azure.com|temporal*|*.livediagnostics.monitor.azure.com|*.azureserviceprofiler.net
+        -javaagent:/application/applicationinsights-agent.jar
+    image: artifact.it.att.com:22609/apm0039582-dkr-group/com/att/be/growthhub-be:1.0.851
+    imagePullPolicy: IfNotPresent
+    livenessProbe:
+      failureThreshold: 3
+      httpGet:
+        httpHeaders:
+        - name: X-Custom-Header
+          value: Alive
+        path: /gh-be/actuator/health/liveness
+        port: http
+        scheme: HTTP
+      initialDelaySeconds: 90
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 5
+    name: growthhub-be
+    ports:
+    - containerPort: 8080
+      name: http
+      protocol: TCP
+    readinessProbe:
+      failureThreshold: 3
+      httpGet:
+        httpHeaders:
+        - name: X-Custom-Header
+          value: Ready
+        path: /gh-be/actuator/health
+        port: http
+        scheme: HTTP
+      initialDelaySeconds: 90
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 5
+    resources:
+      limits:
+        cpu: 1500m
+        memory: 4Gi
+      requests:
+        cpu: 150m
+        memory: 2Gi
+    securityContext:
+      readOnlyRootFilesystem: true
+      runAsGroup: 1001
+      runAsNonRoot: true
+      runAsUser: 1000
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /mnt/blob
+      name: growthhub-shared-storage-stage-growthhub-be
+    - mountPath: /mnt/secrets-store/
+      name: secrets-store-inline
+      readOnly: true
+    - mountPath: /application/config
+      name: config-store
+    - mountPath: /application/heap-dumps
+      name: heap-dumps
+    - mountPath: /tmp
+      name: tmp-directory
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-2nnlh
+      readOnly: true
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: true
+  imagePullSecrets:
+  - name: jfrog-registry
+  nodeName: aks-user-18663277-vmss000000
+  nodeSelector:
+    agentpool: user
+  preemptionPolicy: PreemptLowerPriority
+  priority: 0
+  restartPolicy: Always
+  schedulerName: default-scheduler
+  securityContext: {}
+  serviceAccount: default
+  serviceAccountName: default
+  terminationGracePeriodSeconds: 30
+  tolerations:
+  - effect: NoExecute
+    key: node.kubernetes.io/not-ready
+    operator: Exists
+    tolerationSeconds: 300
+  - effect: NoExecute
+    key: node.kubernetes.io/unreachable
+    operator: Exists
+    tolerationSeconds: 300
+  - effect: NoSchedule
+    key: node.kubernetes.io/memory-pressure
+    operator: Exists
+  volumes:
+  - name: growthhub-shared-storage-stage-growthhub-be
+    persistentVolumeClaim:
+      claimName: growthhub-shared-storage-stage-growthhub-be
+  - configMap:
+      defaultMode: 420
+      name: growthhub-be-configs
+    name: config-store
+  - csi:
+      driver: secrets-store.csi.k8s.io
+      nodePublishSecretRef:
+        name: secrets-store-creds
+      readOnly: true
+      volumeAttributes:
+        secretProviderClass: growthhub-be-spc
+    name: secrets-store-inline
+  - emptyDir: {}
+    name: heap-dumps
+  - emptyDir: {}
+    name: tmp-directory
+  - name: kube-api-access-2nnlh
+    projected:
+      defaultMode: 420
+      sources:
+      - serviceAccountToken:
+          expirationSeconds: 3607
+          path: token
+      - configMap:
+          items:
+          - key: ca.crt
+            path: ca.crt
+          name: kube-root-ca.crt
+      - downwardAPI:
+          items:
+          - fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+            path: namespace
+status:
+  conditions:
+  - lastProbeTime: null
+    lastTransitionTime: "2026-09-03T11:43:58Z"
+    status: "True"
+    type: PodReadyToStartContainers
+  - lastProbeTime: null
+    lastTransitionTime: "2026-09-03T11:43:55Z"
+    status: "True"
+    type: Initialized
+  - lastProbeTime: null
+    lastTransitionTime: "2026-09-03T11:45:28Z"
+    status: "True"
+    type: Ready
+  - lastProbeTime: null
+    lastTransitionTime: "2026-09-03T11:45:28Z"
+    status: "True"
+    type: ContainersReady
+  - lastProbeTime: null
+    lastTransitionTime: "2026-09-03T11:43:55Z"
+    status: "True"
+    type: PodScheduled
+  containerStatuses:
+  - allocatedResources:
+      cpu: 150m
+      memory: 2Gi
+    containerID: containerd://6e2b675ba2d2e3b11436b90750ebfd5fd43bd6ecb5883638e772d5c18f963bdc
+    image: artifact.it.att.com:22609/apm0039582-dkr-group/com/att/be/growthhub-be:1.0.851
+    imageID: artifact.it.att.com:22609/apm0039582-dkr-group/com/att/be/growthhub-be@sha256:e80b3391e6c3a9b0c58e50ea0e85d8a79aa004a095aa861a0152622ab1fe562b
+    lastState: {}
+    name: growthhub-be
+    ready: true
+    resources:
+      limits:
+        cpu: 1500m
+        memory: 4Gi
+      requests:
+        cpu: 150m
+        memory: 2Gi
+    restartCount: 0
+    started: true
+    state:
+      running:
+        startedAt: "2026-09-03T11:43:57Z"
+    volumeMounts:
+    - mountPath: /mnt/blob
+      name: growthhub-shared-storage-stage-growthhub-be
+    - mountPath: /mnt/secrets-store/
+      name: secrets-store-inline
+      readOnly: true
+      recursiveReadOnly: Disabled
+    - mountPath: /application/config
+      name: config-store
+    - mountPath: /application/heap-dumps
+      name: heap-dumps
+    - mountPath: /tmp
+      name: tmp-directory
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-2nnlh
+      readOnly: true
+      recursiveReadOnly: Disabled
+  hostIP: 10.1.32.204
+  hostIPs:
+  - ip: 10.1.32.204
+  phase: Running
+  podIP: 10.1.33.122
+  podIPs:
+  - ip: 10.1.33.122
+  qosClass: Burstable
+  startTime: "2026-09-03T11:43:55Z"

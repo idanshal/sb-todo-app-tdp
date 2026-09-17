@@ -1,11 +1,9 @@
 package com.att.tdp.todo_app.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Value;
 
-@Data
-@AllArgsConstructor
+@Value
 public class ErrorDto {
-    private String errorCode;
-    private String errorMessage;
+    String errorCode;
+    String errorMessage;
 }

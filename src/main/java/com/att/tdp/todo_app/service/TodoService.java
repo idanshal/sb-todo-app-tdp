@@ -1,7 +1,7 @@
-package com.att.tdp.todo_app.services;
+package com.att.tdp.todo_app.service;
 
-import com.att.tdp.todo_app.dal.TodoRepository;
-import com.att.tdp.todo_app.dto.TodoEntity;
+import com.att.tdp.todo_app.repository.TodoRepository;
+import com.att.tdp.todo_app.entity.TodoEntity;
 import com.att.tdp.todo_app.dto.CreateTodoRequest;
 import com.att.tdp.todo_app.dto.UpdateTodoRequest;
 import org.springframework.stereotype.Service;

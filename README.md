@@ -37,7 +37,7 @@ server:
   port: 8081
 ```
 
-- Add packages: dto, controllers, services, dal
+- Add packages: dto, entity, controller, service, repository
 
   
 ## Define models and entities
@@ -103,7 +103,7 @@ spring:
 | updateTodo  | PUT       | /api/todos/{id} | ResponseEntity\<TodoEntity\>         |
 | deleteTodo  | DELETE    | /api/todos/{id} | ResponseEntity\<Void\>               |
 
-- Finally, let's test the endpoints using Bruno
+- Finally, let's test the endpoints using the requests.http file
  
 ## General guidelines
 - Use DTOs to transfer data between layers (SoC)

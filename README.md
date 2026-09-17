@@ -37,7 +37,7 @@ server:
   port: 8081
 ```
 
-- Add packages: dto, controllers, services, dal
+- Add packages: dto, entity, controller, service, repository
 
   
 ## Define models and entities
@@ -117,7 +117,7 @@ spring:
 
 - At this phase, we return an Optional<TodoEntity> from the service layer. 
 If a todo doesn't exist, we return 404.
-- Finally, let's test the endpoints using Bruno
+- Finally, let's test the endpoints using the requests.http file
 
 ## Adding error handling (git branch: 03-error-handling)
 

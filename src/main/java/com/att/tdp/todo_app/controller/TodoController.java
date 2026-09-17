@@ -1,9 +1,9 @@
-package com.att.tdp.todo_app.controllers;
+package com.att.tdp.todo_app.controller;
 
-import com.att.tdp.todo_app.dto.TodoEntity;
+import com.att.tdp.todo_app.entity.TodoEntity;
 import com.att.tdp.todo_app.dto.CreateTodoRequest;
 import com.att.tdp.todo_app.dto.UpdateTodoRequest;
-import com.att.tdp.todo_app.services.TodoService;
+import com.att.tdp.todo_app.service.TodoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;

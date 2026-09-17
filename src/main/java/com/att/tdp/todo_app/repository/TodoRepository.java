@@ -1,6 +1,6 @@
-package com.att.tdp.todo_app.dal;
+package com.att.tdp.todo_app.repository;
 
-import com.att.tdp.todo_app.dto.TodoEntity;
+import com.att.tdp.todo_app.entity.TodoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

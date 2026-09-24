@@ -289,12 +289,12 @@ public class AnotherComponent {
   - H2 Database
 - Fill in the project metadata and generate
 
+![spring initializr](course_data/images/spring_initializr_screenshot.png)
+
 ### Spring Boot Starters
 - Spring Boot starters are built-in Spring dependency descriptors that make development easier and faster.
 - Spring Boot provides over 50 starters for various tasks and technologies. The official starters follow the naming convention `spring-boot-starter-*`, where * denotes the application type.
 - When starting the application, the starter loads all the relevant JARs. For example, if you add `spring-boot-starter-webmvc` dependency to your `pom.xml`, Spring will load all the JARs required to create a RESTful service.
-
-![spring initializr](course_data/images/spring_initializr_screenshot.png)
 
 ### Project structure
 - Open the project in _Intellij IDEA_

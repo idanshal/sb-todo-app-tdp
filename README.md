@@ -727,6 +727,12 @@ In pom.xml add:
         </plugin>
 ```
 
+- Add a `lombok.config` file to the project root with:
+
+```yaml
+      config.stopBubbling = true
+      lombok.getter.noIsPrefix = true
+```
 - IDE: enable annotation processing
 - Refactor TodoController and TodoService to use @RequiredArgsConstructor (remove ctors)
 - Refactor TodoRequest, TodoEntity, ErrorDto, and TodoAppConfig to use @Data and @NoArgsConstructor (remove setters/getters)

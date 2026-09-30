@@ -1,64 +1,119 @@
 package com.att.tdp.todo_app.controller;
 
-import com.att.tdp.todo_app.dto.CreateTodoRequest;
 import com.att.tdp.todo_app.exception.TodoNotFoundException;
 import com.att.tdp.todo_app.service.TodoService;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.web.servlet.MockMvc;
-import tools.jackson.databind.json.JsonMapper;
+import org.springframework.test.web.servlet.assertj.MockMvcTester;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.mockito.Mockito.verifyNoInteractions;
+
+import java.util.stream.Stream;
 
 @WebMvcTest(TodoController.class) // used to focus only on the TodoController and not load the full application context.
 class TodoControllerMvcValidationErrorTests {
 
     @Autowired
-    private MockMvc mockMvc; // MockMvc is used to perform HTTP requests and verify responses.
+    private MockMvcTester mockMvcTester;
 
-    @MockitoBean // @MockBean is used to create and inject a mock instance of TodoService into the TodoController.
+    @MockitoBean
     private TodoService todoService;
 
-    private final JsonMapper jsonMapper = JsonMapper.builder().build();
-
     @Test
-    @SneakyThrows
     void testGetTodoNegativeIdValidationFailure() {
         // act
-        mockMvc.perform(get("/api/todos/-1"))
+        assertThat(mockMvcTester.get().uri("/api/todos/-1"))
                 // assert
-                .andExpect(status().is4xxClientError());
+            .hasStatus(HttpStatus.BAD_REQUEST)
+            .bodyJson()
+            .extractingPath("$.errorCode")
+            .asString()
+            .isEqualTo("102");
+
+        verifyNoInteractions(todoService);
     }
 
-    @Test
-    @SneakyThrows
-    void testCreateTodoBlankTitleValidationFailure() {
-        // arrange
-        CreateTodoRequest request = new CreateTodoRequest();
-        request.setTitle("");
-        request.setDescription("dummy");
-
+    @ParameterizedTest
+    @MethodSource("invalidCreateRequests")
+    void testCreateTodoValidationFailure(String requestBody, String invalidField) {
         // act
-        mockMvc.perform(post("/api/todos")
+        assertThat(mockMvcTester.post().uri("/api/todos")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonMapper.writeValueAsString(request)))
+                        .content(requestBody))
                 // assert
-                .andExpect(status().isBadRequest());
+            .hasStatus(HttpStatus.BAD_REQUEST)
+            .bodyJson()
+            .extractingPath("$.errorMessage")
+            .asString()
+            .contains(invalidField);
+
+        verifyNoInteractions(todoService);
+    }
+
+    static Stream<Arguments> invalidCreateRequests() {
+        return Stream.of(
+                Arguments.of("{\"title\":\"\",\"description\":\"Valid description\"}", "title"),
+                Arguments.of("{\"title\":\"ab\",\"description\":\"Valid description\"}", "title"),
+                Arguments.of("{\"title\":\"%s\",\"description\":\"Valid description\"}".formatted("x".repeat(101)), "title"),
+                Arguments.of("{\"title\":\"Valid title\",\"description\":\"\"}", "description"),
+                Arguments.of("{\"title\":\"Valid title\",\"description\":\"%s\"}".formatted("x".repeat(301)), "description")
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("invalidUpdateRequests")
+    void testUpdateTodoValidationFailure(String requestBody, String invalidField) {
+        assertThat(mockMvcTester.put().uri("/api/todos/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .hasStatus(HttpStatus.BAD_REQUEST)
+                .bodyJson()
+                .extractingPath("$.errorMessage")
+                .asString()
+                .contains(invalidField);
+
+        verifyNoInteractions(todoService);
+    }
+
+    static Stream<Arguments> invalidUpdateRequests() {
+        return Stream.of(
+                Arguments.of("{\"title\":\"ab\"}", "title"),
+                Arguments.of("{\"description\":\"%s\"}".formatted("x".repeat(301)), "description")
+        );
     }
 
     @Test
-    void testGetTodoNotFoundFailure() throws Exception {
+    void testGetTodoNotFoundFailure() {
         // arrange
         when(todoService.getTodo(1L)).thenThrow(new TodoNotFoundException("Todo not found"));
         // act
-        mockMvc.perform(get("/api/todos/1"))
+        assertThat(mockMvcTester.get().uri("/api/todos/1"))
                 // assert
-                .andExpect(status().isNotFound());
+            .hasStatus(HttpStatus.NOT_FOUND)
+            .bodyJson()
+            .isLenientlyEqualTo("""
+                {"errorCode":"100","errorMessage":"Todo not found"}
+                """);
+    }
+
+    @Test
+    void testIllegalArgumentFailure() {
+        assertThat(mockMvcTester.get().uri("/api/todos/illegal"))
+                .hasStatus(HttpStatus.BAD_REQUEST)
+                .bodyJson()
+                .isLenientlyEqualTo("""
+                        {"errorCode":"101","errorMessage":"illegal"}
+                        """);
+
+        verifyNoInteractions(todoService);
     }
 }

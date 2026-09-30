@@ -1,39 +1,41 @@
 package com.att.tdp.todo_app.controller;
 
-import com.att.tdp.todo_app.repository.TodoRepository;
+import com.att.tdp.todo_app.service.ComputeService;
+import com.att.tdp.todo_app.service.TodoService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.http.HttpStatus;
+import org.springframework.test.web.servlet.assertj.MockMvcTester;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureMockMvc
+@WebMvcTest(TodoController.class)
 class TodoControllerMvcDbErrorTests {
 
     @Autowired
-    private MockMvc mockMvc;
+    private MockMvcTester mockMvcTester;
 
     @MockitoBean
-    private TodoRepository todoRepository;
+    private TodoService todoService;
+
+    @MockitoBean
+    private ComputeService computeService;
 
     @Test
-    void testDbError() throws Exception {
+    void testDbError() {
         // arrange
         String dbExceptionMessage = "DB Error";
-        when(todoRepository.findAll()).thenThrow(new DataAccessException(dbExceptionMessage) {});
+        when(todoService.getTodos()).thenThrow(new DataAccessException(dbExceptionMessage) {});
         // act
-        mockMvc.perform(get("/api/todos"))
+        assertThat(mockMvcTester.get().uri("/api/todos"))
                 // assert
-                .andExpect(status().is5xxServerError())
-                .andExpect(content().json("""
-                        {"errorCode":"103","errorMessage":"%s"}""".formatted(dbExceptionMessage)));
+            .hasStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+            .bodyJson()
+            .isLenientlyEqualTo("""
+                {"errorCode":"103","errorMessage":"%s"}""".formatted(dbExceptionMessage));
     }
 }

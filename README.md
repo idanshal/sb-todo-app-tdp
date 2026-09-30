@@ -762,7 +762,7 @@ It means we can `@Autowire` any bean that's picked up by component scanning into
 ### Testing With a Mock Environment
 
 By default, `@SpringBootTest` does not start the server but instead sets up a mock environment for testing web endpoints.
-With Spring, we can query our web endpoints using class MockMvc, as shown in the following example:
+With Spring, we can query our web endpoints using class MockMvcTester, as shown in the following example:
 
 ```java
 @AutoConfigureMockMvc
@@ -770,23 +770,22 @@ With Spring, we can query our web endpoints using class MockMvc, as shown in the
 class SpringMicroserviceDemoApplicationTests {
 
     @Autowired
-    MockMvc mockMvc;
+    MockMvcTester mockMvcTester;
 
    @Test
-    void testWithMockMvc() throws Exception {
-      var result = mockMvc.perform(get("/hello/index"))
-        .andExpect(status().isOk())
-        .andReturn()
-        .getResponse()
-        .getContentAsString();
+    void testWithMockMvcTester() {
+      var result = mockMvcTester.get().uri("/api/todos/1").exchange();
 
-     assertThat(result, is(equalTo("Hello, world")));
-
+      assertThat(result).hasStatusOk();
+      assertThat(result).bodyJson().extractingPath("$.title")
+        .asString().isEqualTo("Do laundry");
+      assertThat(result).bodyJson().extractingPath("$.completed")
+        .asBoolean().isFalse();
     }
 }
 ```
 
-Use annotation `@AutoConfigureMockMvc` for operations with MockMvc.
+Use annotation `@AutoConfigureMockMvc` for operations with MockMvcTester.
 
 ### Testing with @WebMvcTest
 

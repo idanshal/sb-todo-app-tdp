@@ -15,12 +15,10 @@ class TodoServiceRealRepoTest {
     @Autowired
     private TodoRepository todoRepository;
 
-    private TodoService todoService;
-
     @Test
     void testCreateTodo() {
         // Initialize the service with the real repository
-        todoService = new TodoService(todoRepository);
+        TodoService todoService = new TodoService(todoRepository);
 
         // arrange
         CreateTodoRequest request = new CreateTodoRequest();

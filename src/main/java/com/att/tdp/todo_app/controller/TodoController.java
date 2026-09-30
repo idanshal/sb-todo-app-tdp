@@ -8,6 +8,7 @@ import com.att.tdp.todo_app.service.TodoService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ import java.util.List;
 @RequestMapping("/api/todos")
 @Validated
 @RequiredArgsConstructor
+@Slf4j
 public class TodoController {
 
     private final TodoService todoService;
@@ -56,7 +58,10 @@ public class TodoController {
     }
 
     @GetMapping("/compute")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public void compute() {
+        log.info("Client -> Server: compute endpoint called");
         computeService.compute();
+        log.info("Server -> Client: compute endpoint finished");
     }
 }
